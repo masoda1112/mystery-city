@@ -1,8 +1,11 @@
+*{
+  box-sizing: border-box;
+  max-width: 500px;
+  margin: auto;
+}
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: Georgia, serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -10,4 +13,124 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.top-page{
+  width: 100vw;
+}
+
+.top-content{
+  display: flex;
+  flex-flow: column;
+}
+
+section{
+  padding-left:5%;
+  padding-right:5%;
+  height: 100vh;
+  margin: 0;
+}
+
+.image{
+  background-color: #a6a6a6;
+}
+
+.container{
+  width: 100%;
+  height: 100%;
+  padding-top: 30%;
+  display: flex;
+  flex-flow: column;
+  justify-content:space-between;
+}
+
+.container .top{
+  padding: 7%;
+  margin: 0;
+}
+
+.container .bg-image{
+  background-image: url('./assets/謎解きアプリ.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  padding: 7%;
+  padding-top: 20%;
+  margin: 0;
+}
+
+.about .container{
+  padding-top: 15%;
+}
+
+.container .about_top{
+  height: 70%;
+  padding: 5%;
+}
+.container .top .part{
+  height: 50%;
+}
+
+.container .top .part h2{
+  font-size: 30px;
+}
+
+.image .container .top-explanation{
+  padding: 5%;
+  background: rgba(250,250,250,0.6);
+  border-radius: 5%;
+}
+
+.image .container .top-explanation h1{
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.button-content{
+  height: auto;
+  margin: 0;
+  padding-bottom: 30px;
+}
+.button-wrap{
+  padding-bottom: 5%;
+  width: 100%;
+  height: 80px;
+}
+
+.images{
+  display: flex;
+  flex-direction:row;
+  flex-basis: 50%;
+  justify-content: left;
+  height: auto;
+  padding-top: 5%;
+}
+
+.images .image-wrap{
+  height: auto;
+  width: 100%;
+}
+
+.images .image{
+  background-size: contain;
+  background-repeat: no-repeat;
+  height: 90px;
+  /* aspect-ratio: 1.4714; */
+  width: 132.426px;
+  margin: 0;
+}
+
+.loc_1{
+  background-image: url('./assets/sample_loc_1.jpeg');
+}
+
+.loc_2{
+  background-image: url('./assets/sample_loc_2.jpeg');
+}
+
+.rid_1{
+  background-image: url('./assets/sample_riddle_1.png');
+}
+
+.rid_2{
+  background-image: url('./assets/sample_riddle_2.png');
 }
