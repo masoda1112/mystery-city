@@ -4,7 +4,12 @@ function Footer() {
   return (
     <>
         <div className="footer">
-            <p>hisada</p>
+            <div className="footer-content">
+                <div className="footer-part footer-part-1"></div>
+                <div className="footer-part footer-part-2"></div>
+                <div className="footer-part footer-part-3"></div>
+                <div className="footer-part footer-part-4"></div>
+            </div>
         </div>
     </>
   );
