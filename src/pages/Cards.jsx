@@ -5,16 +5,34 @@ import ButtonContent from '../components/button';
 import Card from '../components/card';
 
 function Cards() {
+    const cards = [
+            {name:"sadaf", status: true, image: ""},
+            {name:"fffghhh", status: true, image: ""},
+            {name:"fffghhh", status: true, image: ""},
+            {name:"sadaf", status: true, image: ""},
+            {name:"fffghhh", status: true, image: ""},
+            {name:"fffghhh", status: true, image: ""},
+            {name:"fffghhh", status: true, image: ""},
+            {name:"fffghhh", status: true, image: ""},
+            {name:"fffghhh", status: true, image: ""},
+            {name:"fffghhh", status: true, image: ""},
+        ]
     return (
       <>
           <div className="page">
-              <main className="content">
+              <main className="content cards-content">
                   <div className="title-wrap cards-title-wrap">
                       <p className="title">Cards</p>
                   </div>
                   <div className="cards-container">
                       {
-                          <Card />
+                          cards.map((o, index) => (
+                            <Card 
+                                index={index}
+                                name={o.name}
+                                status={o.status}
+                            />
+                          ))
                       }
                   </div>
               </main>
