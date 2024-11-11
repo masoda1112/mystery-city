@@ -19,19 +19,6 @@ function App() {
             <Route exact path="/mysteries" Component={Mysteries}/>
             <Route exact path="/cards" Component={Cards}/>
             <Route exact path="/ranking" Component={Ranking}/>
-
-            {/* <Route path="/home">
-              <Home />
-            </Route>
-            <Route path="/mysteries">
-              <Mysteries />
-            </Route>
-            <Route path="/cards">
-              <Cards />
-            </Route>
-            <Route path="/ranking">
-              <Ranking />
-            </Route> */}
           </Routes>
       </BrowserRouter>
   );
