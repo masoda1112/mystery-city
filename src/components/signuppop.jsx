@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { auth } from '../firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, Firestore } from '../firebaseConfig';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +24,18 @@ function SignUpForm() {
     const handleSignUp = async (e) => {
         e.preventDefault();
         try {
-            await createUserWithEmailAndPassword(auth, formData.mail, formData.password);
+            const userCredential = await createUserWithEmailAndPassword(auth, formData.mail, formData.password);
+            const user = userCredential.user;
+            const userRef = doc(Firestore, 'users', user.uid);
+            console.log('1')
+            await setDoc(userRef, {
+                userName: formData.userName,
+                nationality: formData.nationality,
+                mail: formData.mail,
+                password: formData.password,
+                createdAt: new Date(),
+            });
+            console.log('2')
             
             navigate('/mysteries'); 
             
