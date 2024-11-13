@@ -1,41 +1,66 @@
-import React, { useContext } from 'react'
-import { TextField, Select } from '@mui/material';
-import Button from '@mui/material/Button';
-import { AppContext } from '../AppContext'
+import React, { useState } from 'react';
+import { TextField, Button, Box, Typography } from '@mui/material';
+import { auth } from '../firebaseConfig';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
 
-function LoginPop() {
-    const {loginPopup, setLoginPopup} = useContext(AppContext)
-    const handleCloseButtonClick = () => {
-        setLoginPopup(false) 
-    }
+function LoginForm() {
+    const [formData, setFormData] = useState({
+        mail: '',
+        password: ''
+    });
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        try {
+            await signInWithEmailAndPassword(auth, formData.mail, formData.password);
+            navigate('/mysteries'); 
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
     return (
-        <>
-        <div className={`pop ${loginPopup ? 'shown' : ''}`}>
-            <div className="pop-content login-pop-content">
-                <p className='close-button' onClick={handleCloseButtonClick}>×</p>
-                <div className="title-wrap">
-                    <h2 className="title">Login</h2>
-                </div>
-                <div className="field-wrap">
-                    <TextField
-                        id="outlined-password-input"
-                        label="Mail"
-                        variant="outlined"
-                    />
-                </div>
-                <div className="field-wrap">
-                    <TextField
-                        id="outlined-password-input"
-                        label="Password"
-                        type="password"
-                        variant="outlined"
-                    />
-                </div>
-                <Button variant="outlined" style={{width: '80%', height: '70px', margin: 'auto', marginTop: '30px'}}>Login</Button>
-            </div>
-        </div>
-        </>
+        <Box component="form" onSubmit={handleLogin} sx={{ maxWidth: 400, mx: "auto", mt: 5 }}>
+            <Typography variant="h5" gutterBottom>
+                Login
+            </Typography>
+            <TextField
+                label="Email"
+                variant="outlined"
+                name="mail"
+                type="email"
+                fullWidth
+                margin="normal"
+                value={formData.mail}
+                onChange={handleChange}
+                required
+            />
+            <TextField
+                label="Password"
+                variant="outlined"
+                name="password"
+                type="password"
+                fullWidth
+                margin="normal"
+                value={formData.password}
+                onChange={handleChange}
+                required
+            />
+            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
+                Login
+            </Button>
+        </Box>
     );
 }
 
-export default LoginPop;
+export default LoginForm;

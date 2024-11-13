@@ -8,9 +8,10 @@ function ButtonContent() {
     const {signUpPopup, setSignUpPopup} = useContext(AppContext)
     const {loginPopup, setLoginPopup} = useContext(AppContext)
 
+
+
     const handleToggleSignUpPop = () => {
         setSignUpPopup(true)
-        console.log(signUpPopup)
     }
     const handleToggleLoginPop = () => {
         setLoginPopup(true)   

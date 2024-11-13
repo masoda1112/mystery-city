@@ -1,21 +1,36 @@
 import React from 'react';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Footer from '../components/footer';
 import ButtonContent from '../components/button';
-import SignUpPop from '../components/signuppop';
+import SignUpForm from '../components/signuppop';
 import LoginPop from '../components/loginpop';
-import { AppContext } from '../AppContext'
+import { AppContext } from '../AppContext';
 
 function Top() {
     const {loginPopup, setLoginPopup} = useContext(AppContext)
     const {signUpPopup, setSignUpPopup} = useContext(AppContext)
-    const handleToggleButtonClick = () => {
-        setSignUpPopup(true)
-    }
-    const handleCloseButtonClick = () => {
+    const signupClose = () => {
         setSignUpPopup(false)   
     }
+    const loginClose = () => {
+        setLoginPopup(false)   
+    }
+
+    useEffect(() => {
+        // ポップアップが開いている間スクロールを無効にする
+        if (loginPopup || signUpPopup) {
+          document.body.style.overflow = 'hidden';
+        } else {
+          document.body.style.overflow = 'auto';
+        }
+    
+        // クリーンアップでoverflowを戻す
+        return () => {
+          document.body.style.overflow = 'auto';
+        };
+      }, [loginPopup, signUpPopup]);
+
     return (
         <>
             <div className="top-page">
@@ -65,8 +80,22 @@ function Top() {
                         </div>
                     </section>
                 </main>
-                <SignUpPop />
-                <LoginPop />
+                <div className={`pop ${signUpPopup ? 'shown' : ''}`}>              
+                    <div className="pop-content signup-pop-content">
+                        <div className="close-button-wrap" onClick={signupClose}>
+                            <p className='close-button'>×</p>
+                        </div>      
+                        <SignUpForm />
+                    </div>
+                </div>
+                <div className={`pop ${loginPopup ? 'shown' : ''}`}>              
+                    <div className="pop-content login-pop-content">
+                        <div className="close-button-wrap" onClick={loginClose}>
+                            <p className='close-button'>×</p>
+                        </div>      
+                        <LoginPop />
+                    </div>
+                </div>
             </div>
         </>
     );

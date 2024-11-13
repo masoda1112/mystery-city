@@ -1,10 +1,10 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
 import Top from './pages/Top'
 import Home from './pages/Home'
 import Mysteries from './pages/Mysteries'
 import Ranking from './pages/Ranking'
 import Cards from './pages/Cards'
+import ProtectedRoute from './components/ProtectedRoute'
 
 import { BrowserRouter, Switch, Routes, Route } from "react-router-dom";
 
@@ -13,12 +13,11 @@ function App() {
   return (
       <BrowserRouter>
           <Routes>
-            {/* exactをつけると完全一致になります。Homeはexactをつけてあげます */}
             <Route exact path="/" Component={Top}/>
-            <Route exact path="/home" Component={Home}/>
-            <Route exact path="/mysteries" Component={Mysteries}/>
-            <Route exact path="/cards" Component={Cards}/>
-            <Route exact path="/ranking" Component={Ranking}/>
+            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/mysteries" element={<ProtectedRoute><Mysteries /></ProtectedRoute>} />
+            <Route path="/cards" element={<ProtectedRoute><Cards /></ProtectedRoute>} />
+            <Route path="/ranking" element={<ProtectedRoute><Ranking /></ProtectedRoute>} />
           </Routes>
       </BrowserRouter>
   );
