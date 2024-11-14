@@ -31,35 +31,65 @@ function LoginForm() {
 
     return (
         <Box component="form" onSubmit={handleLogin} sx={{ maxWidth: 400, mx: "auto", mt: 5 }}>
-            <Typography variant="h5" gutterBottom>
-                Login
-            </Typography>
-            <TextField
-                label="Email"
-                variant="outlined"
-                name="mail"
-                type="email"
-                fullWidth
-                margin="normal"
-                value={formData.mail}
-                onChange={handleChange}
-                required
-            />
-            <TextField
-                label="Password"
-                variant="outlined"
-                name="password"
-                type="password"
-                fullWidth
-                margin="normal"
-                value={formData.password}
-                onChange={handleChange}
-                required
-            />
-            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
-                Login
-            </Button>
-        </Box>
+        <Typography variant="h5" gutterBottom>
+            ログイン
+        </Typography>
+        <TextField
+            label="メールアドレス"
+            variant="outlined"
+            name="mail"
+            type="email"
+            fullWidth
+            margin="normal"
+            value={formData.mail}
+            onChange={handleChange}
+            required
+        />
+        <TextField
+            label="パスワード"
+            variant="outlined"
+            name="password"
+            type="password"
+            fullWidth
+            margin="normal"
+            value={formData.password}
+            onChange={handleChange}
+            required
+        />
+        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
+            ログイン
+        </Button>
+    </Box>
+        // <Box component="form" onSubmit={handleLogin} sx={{ maxWidth: 400, mx: "auto", mt: 5 }}>
+        //     <Typography variant="h5" gutterBottom>
+        //         Login
+        //     </Typography>
+        //     <TextField
+        //         label="Email"
+        //         variant="outlined"
+        //         name="mail"
+        //         type="email"
+        //         fullWidth
+        //         margin="normal"
+        //         value={formData.mail}
+        //         onChange={handleChange}
+        //         required
+        //     />
+        //     <TextField
+        //         label="Password"
+        //         variant="outlined"
+        //         name="password"
+        //         type="password"
+        //         fullWidth
+        //         margin="normal"
+        //         value={formData.password}
+        //         onChange={handleChange}
+        //         required
+        //     />
+        //     <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
+        //         Login
+        //     </Button>
+        // </Box>
     );
 }
 

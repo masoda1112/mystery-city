@@ -22,7 +22,7 @@ function Cards() {
           <div className="page">
               <main className="content cards-content">
                   <div className="title-wrap cards-title-wrap">
-                      <p className="title">Cards</p>
+                      <p className="title">カード</p>
                   </div>
                   <div className="cards-container">
                       {

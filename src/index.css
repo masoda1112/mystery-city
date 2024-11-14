@@ -20,6 +20,10 @@ code {
     monospace;
 }
 
+.en{
+  display:none !important;
+}
+
 .content{
   display: flex;
   flex-flow: column;

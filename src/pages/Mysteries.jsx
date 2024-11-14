@@ -10,11 +10,11 @@ function Mysteries() {
           <div className="page">
               <main className="content">
                   <div className="title-wrap">
-                      <p className="title">Mysteries</p>
+                      <p className="title">ミステリー</p>
                   </div>
-                  <MysteriesCollection status="Ongoing"/>
-                  <MysteriesCollection status="Unplay"/>
-                  <MysteriesCollection status="Cleard"/>
+                  <MysteriesCollection status="考え中"/>
+                  <MysteriesCollection status="未解決"/>
+                  <MysteriesCollection status="解決済み"/>
 
               </main>
               <Footer />
