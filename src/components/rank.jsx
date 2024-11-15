@@ -11,7 +11,7 @@ function Rank({number, name, count}) {
                 <p className="name">{name}</p>
             </div>
             <div className="clear-wrap">
-                <p classNmae="count">{count}</p>
+                <p className="count">{count}</p>
             </div>
         </div>
     </>

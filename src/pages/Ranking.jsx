@@ -31,7 +31,9 @@ function Ranking() {
                   <div className="ranks-container">
                       {
                         ranks.map((o, index)=>(
+                            <div className='rank-wrap' key={index}>
                                 <Rank number={index + 1} name={o.name} count={o.count}/>
+                            </div>
                         )
                         )
                       }

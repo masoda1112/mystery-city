@@ -27,7 +27,7 @@ function MysteriesCollection({status}) {
           <div className="mysteries">
             {
               mysteries.map((c, index) => (
-                  <Mystery title={c.url}/>
+                  <div className='mystery-wrap' key={index}><Mystery title={c.url}/></div>
               ))
             }
           </div>

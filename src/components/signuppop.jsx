@@ -1,42 +1,69 @@
-import React, { useState } from 'react';
-import { TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
-import { doc, setDoc } from 'firebase/firestore';
-import { auth, Firestore } from '../firebaseConfig';
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react'
+import { TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
+import { doc, setDoc } from 'firebase/firestore'
+import { auth, Firestore } from '../firebaseConfig'
+import { createUserWithEmailAndPassword } from "firebase/auth"
+import { useNavigate } from 'react-router-dom'
+import { AppContext } from '../AppContext'
 
 function SignUpForm() {
     const [formData, setFormData] = useState({
         userName: '',
-        nationality: '',
         mail: '',
         password: ''
     });
     const [error, setError] = useState('');
+    const {user, setUser} = useContext(AppContext)
     const navigate = useNavigate();
 
+    // フォームデータの読み込み
     const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
+
+    // サインアップの処理
     const handleSignUp = async (e) => {
         e.preventDefault();
         try {
+            // authアカウント作成
             const userCredential = await createUserWithEmailAndPassword(auth, formData.mail, formData.password);
+            // firestore doc作成
             const user = userCredential.user;
             const userRef = doc(Firestore, 'users', user.uid);
-            console.log('1')
+            const userMysteryStatusRef = doc(Firestore, 'userMysteryStatus', user.uid);
+            const userMysteryProgressRef = doc(Firestore, 'userMysteryProgress', user.uid);
+            // const ranking = doc(Firestore, 'ranking', user.uid);
+            // 事前にmysteryを全部取得し、idを保存しておく
+            
+            
+            // user
             await setDoc(userRef, {
                 userName: formData.userName,
-                nationality: formData.nationality,
                 mail: formData.mail,
                 password: formData.password,
+                totalScore: 0,
                 createdAt: new Date(),
             });
-            console.log('2')
+
+            // userのmysterystatus 0:ロック,1:未購入,2:購入済み,3:プレイ中,4:クリア
+            await setDoc(userMysteryStatusRef, [
+                {mystery_id: 1, status: 2},
+                {mystery_id: 1, status: 2},
+            ]);
+            // userのmystery進捗度 0:未着手, 1:一問正解
+            await setDoc(userMysteryProgressRef, {
+                mystery_id: 1,
+                progress: 0
+            });
+
+            // ローカルストレージにuser情報格納
+            localStorage.setItem('user', JSON.stringify(user));
+            setUser(JSON.parse(localStorage.getItem('user')));
             
+            // mysteriesにリダイレクト
             navigate('/mysteries'); 
             
         } catch (error) {

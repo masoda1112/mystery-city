@@ -27,11 +27,13 @@ function Cards() {
                   <div className="cards-container">
                       {
                           cards.map((o, index) => (
-                            <Card 
-                                index={index}
-                                name={o.name}
-                                status={o.status}
-                            />
+                            <div className='card-wrap-wrap' key={index}>
+                                <Card 
+                                    index={index}
+                                    name={o.name}
+                                    status={o.status}
+                                />
+                            </div>
                           ))
                       }
                   </div>

@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { auth } from '../firebaseConfig';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
+import { getDocumentsByCondition } from '../functions/function'
+import { AuthContext } from '../AuthContext'
+import { AppContext } from '../AppContext';
 
 function LoginForm() {
     const [formData, setFormData] = useState({
@@ -11,6 +14,7 @@ function LoginForm() {
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
+    const {user, setUser} = useContext(AppContext)
 
     const handleChange = (e) => {
         setFormData({
@@ -23,6 +27,15 @@ function LoginForm() {
         e.preventDefault();
         try {
             await signInWithEmailAndPassword(auth, formData.mail, formData.password);
+            const userData = await getDocumentsByCondition('users', 'mail', '==', formData.mail);
+            // データが見つかった場合
+            if (userData.length > 0) {
+                localStorage.setItem('user', JSON.stringify(userData[0]));
+                setUser(JSON.parse(localStorage.getItem('user')));
+            } else {
+            // setError('User not found');
+            }
+            // console.log(localStorage)
             navigate('/mysteries'); 
         } catch (error) {
             setError(error.message);

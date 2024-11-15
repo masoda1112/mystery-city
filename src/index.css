@@ -280,11 +280,14 @@ section{
   overflow-y: scroll;
   height: 50%;
 }
-
+.mystery-wrap{
+  height: 100%;
+  width: 300px;
+}
 .mystery{
   height: 100%;
   flex-basis: 100%;
-  width: 300px;
+  width: 100%;
 }
 
 .mystery-content{
@@ -320,10 +323,11 @@ section{
   margin: 0;
 }
 
-.card-wrap{
+.card-wrap-wrap{
   width: 50%;
   padding: 10px 10%;
 }
+
 
 .card{
   height: 150px;
