@@ -34,33 +34,33 @@ function SignUpForm() {
             const user = userCredential.user;
             const userRef = doc(Firestore, 'users', user.uid);
             const userMysteryStatusRef = doc(Firestore, 'userMysteryStatus', user.uid);
-            const userMysteryProgressRef = doc(Firestore, 'userMysteryProgress', user.uid);
-            // const ranking = doc(Firestore, 'ranking', user.uid);
-            // 事前にmysteryを全部取得し、idを保存しておく
-            
-            
-            // user
-            await setDoc(userRef, {
+            const userData = {
                 userName: formData.userName,
                 mail: formData.mail,
                 password: formData.password,
                 totalScore: 0,
+                ranking: 1000,
                 createdAt: new Date(),
-            });
+            }
+            // const ranking = doc(Firestore, 'ranking', user.uid);
+            // mysteriesStatusをid1~30まで先に保存しておく。全て未購入状態
+            let mysteriesStatus = []
+            let count = 1
+            while (count < 30){
+                let data = {mystery_id: count, status: 1}
+                mysteriesStatus.push(data)
+                count ++
+            }
+            
+            // userに登録、ranking=1000はランク外の意、rankはmysteryクリア時に更新
+            await setDoc(userRef, userData);
 
             // userのmysterystatus 0:ロック,1:未購入,2:購入済み,3:プレイ中,4:クリア
-            await setDoc(userMysteryStatusRef, [
-                {mystery_id: 1, status: 2},
-                {mystery_id: 1, status: 2},
-            ]);
-            // userのmystery進捗度 0:未着手, 1:一問正解
-            await setDoc(userMysteryProgressRef, {
-                mystery_id: 1,
-                progress: 0
-            });
+            await setDoc(userMysteryStatusRef,  { mysteriesStatus });
+
 
             // ローカルストレージにuser情報格納
-            localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('user', JSON.stringify(userData));
             setUser(JSON.parse(localStorage.getItem('user')));
             
             // mysteriesにリダイレクト

@@ -26,7 +26,7 @@ function Ranking() {
           <div className="page">
               <main className="content ranks-content">
                   <div className="title-wrap">
-                      <p className="title">ランキング</p>
+                      <p className="title">Ranking</p>
                   </div>
                   <div className="ranks-container">
                       {

@@ -10,6 +10,7 @@ import { async } from '@firebase/util';
 function Home() {
     // const {currentUser} = useContext(AuthContext)
     let userData = JSON.parse(localStorage.getItem('user'))
+    const userRank = userData.ranking == 1000 ? '外' : userData.rank
 
     const handleLogout = async () => {
         try {
@@ -29,14 +30,14 @@ function Home() {
                         <div className="status-wrap">
                             <div className="clear-count">
                                 <div className="clear-count-wrap status-part-wrap">
-                                    <p className="title">クリア</p>
-                                    <p className="number">12</p>
+                                    <p className="title">clear</p>
+                                    <p className="number">{userData.totalScore}</p>
                                 </div>
                             </div>
                             <div className="ranking-number">
                                 <div className="ranking-number-wrap status-part-wrap">
-                                    <p className="title">ランキング</p>
-                                    <p className="number">1</p>
+                                    <p className="title">rank</p>
+                                    <p className="number">{userRank}</p>
                                 </div>
                             </div>
                         </div>

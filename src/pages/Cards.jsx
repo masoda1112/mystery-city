@@ -3,26 +3,22 @@ import Button from '@mui/material/Button';
 import Footer from '../components/footer';
 import ButtonContent from '../components/button';
 import Card from '../components/card';
+import { getCollectionDocuments } from '../functions/function'
 
 function Cards() {
-    const cards = [
-            {name:"sadaf", status: true, image: ""},
-            {name:"fffghhh", status: true, image: ""},
-            {name:"fffghhh", status: true, image: ""},
-            {name:"sadaf", status: true, image: ""},
-            {name:"fffghhh", status: true, image: ""},
-            {name:"fffghhh", status: true, image: ""},
-            {name:"fffghhh", status: true, image: ""},
-            {name:"fffghhh", status: true, image: ""},
-            {name:"fffghhh", status: true, image: ""},
-            {name:"fffghhh", status: true, image: ""},
-        ]
+    let cards = []
+    getCollectionDocuments('card').then(data => {
+        cards = data
+        console.log("ユーザーデータ:", data);
+    }).catch(error => {
+        console.error("エラー:", error);
+    });
     return (
       <>
           <div className="page">
               <main className="content cards-content">
                   <div className="title-wrap cards-title-wrap">
-                      <p className="title">カード</p>
+                      <p className="title">Cards</p>
                   </div>
                   <div className="cards-container">
                       {

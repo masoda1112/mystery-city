@@ -10,7 +10,7 @@ function Mysteries() {
           <div className="page">
               <main className="content">
                   <div className="title-wrap">
-                      <p className="title">ミステリー</p>
+                      <p className="title">Mystery</p>
                   </div>
                   <MysteriesCollection status="考え中"/>
                   <MysteriesCollection status="未解決"/>

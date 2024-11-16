@@ -16,3 +16,19 @@ export async function getDocumentsByCondition(collectionName, field, operator, v
   
   return results; // 取得したドキュメントの配列を返す
 }
+
+export async function getCollectionDocuments(collectionName) {
+    const collectionRef = collection(Firestore, collectionName);
+    try {
+        const querySnapshot = await getDocs(collectionRef); // 全ドキュメント取得
+        const documents = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+        return documents;
+
+    } catch (error) {
+        console.error("データの取得に失敗しました:", error);
+        return []; // エラー時は空配列を返す
+    }
+}
