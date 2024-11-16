@@ -1,18 +1,32 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import Button from '@mui/material/Button';
 import Footer from '../components/footer';
 import ButtonContent from '../components/button';
 import Card from '../components/card';
 import { getCollectionDocuments } from '../functions/function'
+import { AppContext } from '../AppContext'
+
 
 function Cards() {
-    let cards = []
-    getCollectionDocuments('card').then(data => {
-        cards = data
-        console.log("ユーザーデータ:", data);
-    }).catch(error => {
-        console.error("エラー:", error);
-    });
+    const {cards, setCards} = useContext(AppContext)
+    let count = 0
+    let prevCount = 0
+    useEffect(() => {
+        // 一度だけ実行したい関数
+        const fetchData = () => getCollectionDocuments('card').then(data => {
+            setCards(data)
+            console.log("ユーザーデータ:", cards);
+        }).catch(error => {
+            console.error("エラー:", error);
+        });
+        prevCount = count
+        count ++
+        if (cards == prevCount) {
+            fetchData();
+        }
+    }, [cards]); 
+    
+
     return (
       <>
           <div className="page">
@@ -22,15 +36,15 @@ function Cards() {
                   </div>
                   <div className="cards-container">
                       {
-                          cards.map((o, index) => (
+                          cards ? cards.map((o, index) => (
                             <div className='card-wrap-wrap' key={index}>
                                 <Card 
-                                    index={index}
                                     name={o.name}
-                                    status={o.status}
+                                    description={o.description}
+                                    img={o.img}
                                 />
                             </div>
-                          ))
+                          )) : <div>cardがありません</div>
                       }
                   </div>
               </main>
