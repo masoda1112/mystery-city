@@ -1,33 +1,36 @@
 import React from 'react';
 import Mystery from '../components/mystery';
 
-function MysteriesCollection({status}) {
+function MysteriesCollection({}) {
   const mysteries = [
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
-    {url: './assets/mystery.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
+    {url: '../assets/card_1.png'},
   ]
   return (
     <>
       <div className="mysteries-wrap">
-          <p className="mysteries-status">{status}</p>
           <div className="mysteries">
             {
               mysteries.map((c, index) => (
-                  <div className='mystery-wrap' key={index}><Mystery title={c.url}/></div>
+                  <div className='mystery-wrap' key={index}><Mystery url={c.url}/></div>
               ))
             }
           </div>

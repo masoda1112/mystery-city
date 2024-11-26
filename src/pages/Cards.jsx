@@ -5,6 +5,7 @@ import ButtonContent from '../components/button';
 import Card from '../components/card';
 import { getCollectionDocuments } from '../functions/function'
 import { AppContext } from '../AppContext'
+import Header from '../components/header'
 
 
 function Cards() {
@@ -30,10 +31,9 @@ function Cards() {
     return (
       <>
           <div className="page">
+              <Header title={'Cards'}/>
               <main className="content cards-content">
-                  <div className="title-wrap cards-title-wrap">
-                      <p className="title">Cards</p>
-                  </div>
+
                   <div className="cards-container">
                       {
                           cards ? cards.map((o, index) => (

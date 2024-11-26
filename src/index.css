@@ -27,13 +27,14 @@ code {
 .content{
   display: flex;
   flex-flow: column;
-  width: 90%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   overflow: scroll;
   padding-bottom: 100px;
+  margin-top: 80px;
 }
 
 .page{
@@ -41,6 +42,8 @@ code {
   flex-direction: column;
   width: 100%;
   height: 100vh;
+  /* background-image: url('./assets/card_1.png'); */
+  background-size: cover;
 }
 
 section{
@@ -48,6 +51,10 @@ section{
   padding-right:5%;
   height: 100vh;
   margin: 0;
+}
+
+.mysteries_content{
+  margin-top: 80px;
 }
 
 /* 共通 */
@@ -200,6 +207,19 @@ section{
   background-image: url('./assets/footer_icon_4.jpeg');
 }
 
+.title-wrap{
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  height: 80px;
+  border-bottom: 1px solid gray;
+}
+
+.title-wrap .title{
+  font-size: 30px;
+  text-align: center;
+}
+
 /* home */
 .home-page{
   display: flex;
@@ -257,45 +277,41 @@ section{
 
 /* mysteries */
 
-.title-wrap{
-  width: 100%;
-  padding-top: 50px;
-  padding-bottom: 30px;
-  height: 150px;
-}
-
-.title-wrap .title{
-  font-size: 30px;
-}
 
 .mysteries-wrap{
   width: 100%;
-  height: 33%;
-
+  height: auto;
 }
 
 .mysteries{
   display: flex;
-  flex-direction: row;
-  overflow-y: scroll;
-  height: 50%;
+  flex-direction: column;
+  overflow-x:auto;
+  height: auto;
+  
 }
+
 .mystery-wrap{
-  height: 100%;
-  width: 300px;
+  height: 25vh;
+  width: 100%;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
 }
+
 .mystery{
   height: 100%;
   flex-basis: 100%;
   width: 100%;
+  border-radius: 5%;
 }
 
 .mystery-content{
-  width: 33vw;
+  width: 100%;
   height: 100%;
-  margin-right: 10px;
+  margin-bottom: 20px;
   background-color: #151f28;
-  border-radius: 10px;
+  border-radius: 13%;
 }
 
 .mysteries-wrap .mysteries-status{
@@ -303,7 +319,14 @@ section{
   padding-bottom: 15px;
 }
 
+.mystery-samnail-img{
+  width: 100%;
+  height: auto;
+  border-radius: 13%;
+}
+
 /* cards */
+
 .cards-content{
   justify-content: start;
 }
@@ -353,11 +376,15 @@ section{
 }
 
 .title-wrap{
+  position: fixed;
+  background-color: white;
   margin: 0;
 }
 .rank{
   display: flex;
   flex-direction: row;
+  padding: 10px;
+  border-bottom: 1px solid gray;
 }
 
 .ranks-container{

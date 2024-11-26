@@ -1,6 +1,7 @@
 import Footer from '../components/footer';
 import Card from '../components/footer';
 import Rank from '../components/rank';
+import Header from '../components/header'
 
 function Ranking() {
     const ranks = [
@@ -24,10 +25,8 @@ function Ranking() {
     return (
       <>
           <div className="page">
+              <Header title='Ranking'/>
               <main className="content ranks-content">
-                  <div className="title-wrap">
-                      <p className="title">Ranking</p>
-                  </div>
                   <div className="ranks-container">
                       {
                         ranks.map((o, index)=>(
