@@ -1,6 +1,7 @@
 import React from 'react';
 
 function Rank({number, name, count}) {
+
   return (
     <>
         <div className="rank">

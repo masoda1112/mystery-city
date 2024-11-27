@@ -8,9 +8,32 @@ import { AppContext } from '../AppContext'
 import { async } from '@firebase/util';
 
 function Home() {
+    // userRankの判断
+    const calUserClass = (score) => {
+        let userClass
+        if( score < 1) {
+            userClass = '見習い'
+        }else if(score < 3){
+            userClass = '初心者'
+        }else if(score < 5){
+            userClass = '探求者'
+        }else if(score < 7){
+            userClass = '熟練者'
+        }else if(score < 10){
+            userClass = '達人'
+        }else if(10 < score){
+            userClass = 'VIP'
+        }else{
+            userClass = '準備中'
+        }
+
+        return userClass
+    }
+
     // const {currentUser} = useContext(AuthContext)
     let userData = JSON.parse(localStorage.getItem('user'))
-    const userRank = userData.ranking == 1000 ? '外' : userData.rank
+    const score = userData.totalScore
+    const userClass = calUserClass(score)
 
     const handleLogout = async () => {
         try {
@@ -36,8 +59,8 @@ function Home() {
                             </div>
                             <div className="ranking-number">
                                 <div className="ranking-number-wrap status-part-wrap">
-                                    <p className="title">rank</p>
-                                    <p className="number">{userRank}</p>
+                                    <p className="title">class</p>
+                                    <p className="user-class-name">{userClass}</p>
                                 </div>
                             </div>
                         </div>

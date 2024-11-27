@@ -56,6 +56,7 @@ export const setLocalStorageItem = (key, value) => {
   }
 }
 
+
 export const addToRankArray = async(rank, uid) => {
   // rank（クリア数)を文字列に変換し、refを作成
   const docRef = doc(Firestore, "ranking", rank.toString())
@@ -70,12 +71,12 @@ export const addToRankArray = async(rank, uid) => {
       if (rank1.length < MAX_ARRAY_SIZE) {
         // rank.1 にデータを追加
         await updateDoc(docRef, {
-          [`${rank}.1`]: arrayUnion(uid),
+          "1": arrayUnion(uid),
         });
       } else {
         // rank.2 にデータを追加
         await updateDoc(docRef, {
-          [`${rank}.2`]: arrayUnion(uid),
+          "2": arrayUnion(uid),
         });
       }
     } else {

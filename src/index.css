@@ -262,6 +262,12 @@ section{
   font-size: 30px;
   padding: 10px;
 }
+
+.user-class-name{
+  text-align: left;
+  font-size: 20px;
+  padding: 10px;
+}
 .name-wrap{
   font-size: 30px;
 }

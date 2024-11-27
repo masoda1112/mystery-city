@@ -2,6 +2,7 @@ import Footer from '../components/footer';
 import Card from '../components/footer';
 import Rank from '../components/rank';
 import Header from '../components/header'
+import { getCollectionDocuments } from "../functions/function"
 
 function Ranking() {
     const ranks = [
@@ -21,6 +22,11 @@ function Ranking() {
         {name: 'mike6434', count: 4},
         {name: 'mary6784', count: 1},
     ]
+
+    const ranking = getCollectionDocuments('ranking')
+
+    console.log(ranking)
+
 
     return (
       <>
