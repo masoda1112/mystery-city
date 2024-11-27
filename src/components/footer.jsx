@@ -1,8 +1,9 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Footer() {
     const navigate = useNavigate()
+    const location = useLocation().pathname
 
     const handleHome = () => {
         navigate('/home')
@@ -10,8 +11,8 @@ function Footer() {
     const handleMysteries = () => {
         navigate('/mysteries')
     }
-    const handleCards = () => {
-        navigate('/cards')
+    const handleClear = () => {
+        navigate('/clear')
     }
     const handleRanking = () => {
         navigate('/ranking')
@@ -21,10 +22,10 @@ function Footer() {
     <>
         <div className="footer">
             <div className="footer-content">
-                <div className="footer-part footer-part-1" onClick={handleHome}></div>
-                <div className="footer-part footer-part-2" onClick={handleMysteries}></div>
-                <div className="footer-part footer-part-3" onClick={handleCards}></div>
-                <div className="footer-part footer-part-4" onClick={handleRanking}></div>
+                <div className={`footer-part footer-part-1 ${location == "/home" ? "opacity-100" : ""}`} onClick={handleHome}></div>
+                <div className={`footer-part footer-part-2 ${location == "/mysteries" ? "opacity-100" : ""}`} onClick={handleMysteries}></div>
+                <div className={`footer-part footer-part-3 ${location == "/clear" ? "opacity-100" : ""}`} onClick={handleClear}></div>
+                <div className={`footer-part footer-part-4 ${location == "/ranking" ? "opacity-100" : ""}`} onClick={handleRanking}></div>
             </div>
         </div>
     </>

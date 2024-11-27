@@ -5,6 +5,7 @@ import { auth, Firestore } from '../firebaseConfig'
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../AppContext'
+import { addNewDocumentWithID, addToRankArray, setLocalStorageItem } from '../functions/function'
 
 function SignUpForm() {
     const [formData, setFormData] = useState({
@@ -24,44 +25,57 @@ function SignUpForm() {
         });
     };
 
+    // authアカウント作成, authデータをレスポンス
+    const addAuthAcount = async(auth, mail, password) => {
+        const userCredential = await createUserWithEmailAndPassword(auth, mail, password);
+        console.log("0", userCredential)
+        return userCredential.user
+    }
+
+    const buildUserData = (name, mail, password) => {
+        const data = {
+            userName: name,
+            mail: mail,
+            password: password,
+            totalScore: 0,
+            createdAt: new Date(),
+        }
+
+        return data
+    }
+
+    const buildDefaultMysteriesStatus = () =>{
+        let arr = []
+        let count = 1
+        while (count < 30){
+            let data = {mystery_id: count, status: 1}
+            arr.push(data)
+            count ++
+        }
+        return arr
+    }
+    
+
     // サインアップの処理
     const handleSignUp = async (e) => {
         e.preventDefault();
         try {
-            // authアカウント作成
-            const userCredential = await createUserWithEmailAndPassword(auth, formData.mail, formData.password);
-            // firestore doc作成
-            const user = userCredential.user;
-            const userRef = doc(Firestore, 'users', user.uid);
-            const userMysteryStatusRef = doc(Firestore, 'userMysteryStatus', user.uid);
-            const userData = {
-                userName: formData.userName,
-                mail: formData.mail,
-                password: formData.password,
-                totalScore: 0,
-                ranking: 1000,
-                createdAt: new Date(),
-            }
-            // const ranking = doc(Firestore, 'ranking', user.uid);
-            // mysteriesStatusをid1~30まで先に保存しておく。全て未購入状態
-            let mysteriesStatus = []
-            let count = 1
-            while (count < 30){
-                let data = {mystery_id: count, status: 1}
-                mysteriesStatus.push(data)
-                count ++
-            }
+            const user = await addAuthAcount(auth, formData.mail, formData.password)
+            // fireStore用のuserData再定義
+            const userData = buildUserData(formData.userName, formData.mail, formData.password)
             
-            // userに登録、ranking=1000はランク外の意、rankはmysteryクリア時に更新
-            await setDoc(userRef, userData);
+            // mysteriesStatusをid1~30まで先に保存しておく。全て未購入状態
+            const mysteriesStatus = buildDefaultMysteriesStatus()
 
-            // userのmysterystatus 0:ロック,1:未購入,2:購入済み,3:プレイ中,4:クリア
-            await setDoc(userMysteryStatusRef,  { mysteriesStatus });
-
+            // user,userMysteryStatusに新しいdocを追加
+            await addNewDocumentWithID('users', user.uid, userData)
+            await addNewDocumentWithID('userMysteryStatus', user.uid, {mysteriesStatus})
 
             // ローカルストレージにuser情報格納
-            localStorage.setItem('user', JSON.stringify(userData));
-            setUser(JSON.parse(localStorage.getItem('user')));
+            setLocalStorageItem('user', userData)
+
+            // rankingに追加
+            await addToRankArray(0, user.uid)
             
             // mysteriesにリダイレクト
             navigate('/mysteries'); 

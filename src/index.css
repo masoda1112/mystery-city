@@ -192,7 +192,6 @@ section{
 .footer-part-1{
   background-image: url('./assets/footer_icon_1.jpeg');
   background-size: 40%;
-
 }
 
 .footer-part-2{
@@ -205,6 +204,10 @@ section{
 
 .footer-part-4{
   background-image: url('./assets/footer_icon_4.jpeg');
+}
+
+.opacity-100{
+  opacity: 1 !important;
 }
 
 .title-wrap{
@@ -230,7 +233,7 @@ section{
 
 .home-content{
   padding: 10%;
-  padding-top: 20%;
+  /* padding-top: 20%; */
   padding-bottom: 50%;
 }
 
@@ -294,8 +297,7 @@ section{
 .mystery-wrap{
   height: 25vh;
   width: 100%;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   overflow: hidden;
 }
 
@@ -303,7 +305,7 @@ section{
   height: 100%;
   flex-basis: 100%;
   width: 100%;
-  border-radius: 5%;
+  overflow: hidden;
 }
 
 .mystery-content{
@@ -311,7 +313,6 @@ section{
   height: 100%;
   margin-bottom: 20px;
   background-color: #151f28;
-  border-radius: 13%;
 }
 
 .mysteries-wrap .mysteries-status{

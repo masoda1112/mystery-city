@@ -3,7 +3,7 @@ import Mystery from '../components/mystery';
 
 function MysteriesCollection({}) {
   const mysteries = [
-    {url: '../assets/card_1.png'},
+    {url: '../assets/sample_loc_1.jpeg'},
     {url: '../assets/card_1.png'},
     {url: '../assets/card_1.png'},
     {url: '../assets/card_1.png'},
@@ -24,6 +24,7 @@ function MysteriesCollection({}) {
     {url: '../assets/card_1.png'},
     {url: '../assets/card_1.png'},
   ]
+  
   return (
     <>
       <div className="mysteries-wrap">
