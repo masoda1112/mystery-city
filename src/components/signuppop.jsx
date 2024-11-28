@@ -5,7 +5,7 @@ import { auth, Firestore } from '../firebaseConfig'
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../AppContext'
-import { addNewDocumentWithID, addToRankArray, setLocalStorageItem , checkUserNameExists, addNewDocument} from '../functions/function'
+import { addNewDocumentWithID, addToRankArray, setLocalStorageItem , checkUserNameExists, addNewDocument, validateSignup} from '../functions/function'
 
 function SignUpForm() {
     const [formData, setFormData] = useState({
@@ -56,44 +56,10 @@ function SignUpForm() {
 
     // バリデーション関数
     const validateForm = async() => {
-        const newErrors = { userName: "", mail: "", password: "" };
-        let isValid = true;
-
-        // ユーザーネームのバリデーション
-        if (!formData.userName) {
-            newErrors.userName = "ユーザーネームは必須です";
-            isValid = false;
-        }
-
-        // 名前がユニークかどうか確認
-        const unique = await checkUserNameExists(formData.userName)
-        if(unique){
-            newErrors.userName = "このユーザーネームは既に使われています。"
-            isValid = false;
-        }
-
-        // メールアドレスのバリデーション
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        if (!formData.mail) {
-            newErrors.mail = "メールアドレスは必須です";
-            isValid = false;
-            } else if (!emailRegex.test(formData.mail)) {
-            newErrors.mail = "メールアドレスの形式が無効です";
-            isValid = false;
-        }
-
-        // パスワードのバリデーション
-        if (!formData.password) {
-            newErrors.password = "パスワードは必須です";
-            isValid = false;
-          } else if (formData.password.length < 8) {
-            newErrors.password = "パスワードは8文字以上である必要があります";
-            isValid = false;
-          }
-
-
-        setError(newErrors);
-        return isValid;
+        const newErrors = await validateSignup(formData.userName, formData.mail, formData.password)
+        const isValid = newErrors == "" ? true : false
+        setError(newErrors)
+        return isValid
     };
     
 
@@ -123,7 +89,7 @@ function SignUpForm() {
             setLocalStorageItem('user', userData)
 
             // rankingに追加
-            await addToRankArray(0, {userName: formData.userName})
+            await addToRankArray(0, formData.userName)
             
             // mysteriesにリダイレクト
             navigate('/mysteries'); 

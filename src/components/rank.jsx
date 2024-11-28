@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Rank({number, name, count}) {
+function Rank({number, name}) {
 
   return (
     <>
@@ -10,9 +10,6 @@ function Rank({number, name, count}) {
             </div>
             <div className="name-wrap">
                 <p className="name">{name}</p>
-            </div>
-            <div className="clear-wrap">
-                <p className="count">{count}</p>
             </div>
         </div>
     </>

@@ -70,7 +70,7 @@ export const setLocalStorageItem = (key, value) => {
 }
 
 
-export const addToRankArray = async(rank, uid) => {
+export const addToRankArray = async(rank, name) => {
   // rank（クリア数)を文字列に変換し、refを作成
   const docRef = doc(Firestore, "ranking", rank.toString())
   const MAX_ARRAY_SIZE = 1000
@@ -84,12 +84,12 @@ export const addToRankArray = async(rank, uid) => {
       if (rank1.length < MAX_ARRAY_SIZE) {
         // rank.1 にデータを追加
         await updateDoc(docRef, {
-          "1": arrayUnion(uid),
+          "1": arrayUnion(name),
         });
       } else {
         // rank.2 にデータを追加
         await updateDoc(docRef, {
-          "2": arrayUnion(uid),
+          "2": arrayUnion(name),
         });
       }
     } else {
@@ -106,4 +106,69 @@ export const checkUserNameExists = async (userName) => {
   console.log(resultByAPI)
   console.log(resultByAPI.length)
   return !(resultByAPI.length == 0); // ユーザー名がすでに存在する場合はtrueを返す
+};
+
+export const validateSignup = async(userName, mail, password) => {
+    const newErrors = { userName: "", mail: "", password: "" };
+    let isValid = true;
+
+    // ユーザーネームのバリデーション
+    if (!userName) {
+        newErrors.userName = "ユーザーネームは必須です";
+        isValid = false;
+    }
+
+    // 名前がユニークかどうか確認
+    const unique = await checkUserNameExists(userName)
+    if(unique){
+        newErrors.userName = "このユーザーネームは既に使われています。"
+        isValid = false;
+    }
+
+    // メールアドレスのバリデーション
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    if (!mail) {
+        newErrors.mail = "メールアドレスは必須です";
+        isValid = false;
+        } else if (!emailRegex.test(mail)) {
+        newErrors.mail = "メールアドレスの形式が無効です";
+        isValid = false;
+    }
+
+    // パスワードのバリデーション
+    if (!password) {
+        newErrors.password = "パスワードは必須です";
+        isValid = false;
+      } else if (password.length < 8) {
+        newErrors.password = "パスワードは8文字以上である必要があります";
+        isValid = false;
+      }
+
+    return isValid ? "" : newErrors
+};
+
+export const validateLogin = async( mail, password) => {
+  const newErrors = { userName: "", mail: "", password: "" };
+  let isValid = true;
+
+  // メールアドレスのバリデーション
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  if (!mail) {
+      newErrors.mail = "メールアドレスは必須です";
+      isValid = false;
+      } else if (!emailRegex.test(mail)) {
+      newErrors.mail = "メールアドレスの形式が無効です";
+      isValid = false;
+  }
+
+  // パスワードのバリデーション
+  if (!password) {
+      newErrors.password = "パスワードは必須です";
+      isValid = false;
+    } else if (password.length < 8) {
+      newErrors.password = "パスワードは8文字以上である必要があります";
+      isValid = false;
+    }
+
+  return isValid ? "" : newErrors
 };

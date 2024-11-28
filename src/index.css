@@ -256,9 +256,13 @@ section{
   border-radius: 10%;
   padding: 10px;
 }
+.number-wrap{
+  margin:0 20px;
 
+}
 .number{
-  text-align: center;
+  width: 100%;
+  text-align: left;
   font-size: 30px;
   padding: 10px;
 }
@@ -270,6 +274,7 @@ section{
 }
 .name-wrap{
   font-size: 30px;
+  margin-left: 20px;
 }
 
 .nationality{
@@ -390,7 +395,7 @@ section{
 .rank{
   display: flex;
   flex-direction: row;
-  padding: 10px;
+  padding: 10px 30px;
   border-bottom: 1px solid gray;
 }
 

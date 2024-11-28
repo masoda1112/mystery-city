@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import Footer from '../components/footer';
-import Card from '../components/footer';
-import Rank from '../components/rank';
+import React, { useState, useEffect } from 'react'
+import Footer from '../components/footer'
+import Card from '../components/footer'
+import Rank from '../components/rank'
 import Header from '../components/header'
 import { getCollectionDocuments } from "../functions/function"
 
@@ -9,6 +9,7 @@ function Ranking() {
     // ranking取得し格納するstate
     const [allRanking, setAllRanking] = useState([])
     const [userNameScore, setUserNameScore] = useState([])
+    const [flattenedArray, setFlattenedArray] = useState([])
 
     // allRankingから平な配列を作る関数
     const buildFlattenedArray = () => {
@@ -20,12 +21,12 @@ function Ranking() {
             if (doc) {
                 // フィールド1が存在する場合、それを追加
                 if (doc[1] && doc[1].length > 0) {
-                    flattenedArray.push(...doc[1].filter(item => item !== "").userName);
+                    flattenedArray.push(...doc[1].filter(item => item !== ""))
                 }
 
                 // フィールド2が存在する場合、それを追加
                 if (doc[2] && doc[2].length > 0) {
-                    flattenedArray.push(...doc[2].filter(item => item !== "").userName);
+                    flattenedArray.push(...doc[2].filter(item => item !== ""))
                 }
             }
         }
@@ -37,22 +38,21 @@ function Ranking() {
         const fetchDocuments = async () => {
             const data = await getCollectionDocuments('ranking')
             // const userData = await getDocumentsWithSelectedFields('users', ['userName', 'totalScore'])
-            setAllRanking(data);
+            setAllRanking(data)
             // setUserNameScore(userData)
-        };
-    
+        }
         fetchDocuments();
     }, []);
 
     useEffect(() => {
         if (allRanking) {
-            const flattenedArray = buildFlattenedArray()
-            console.log(flattenedArray);
-            console.log(userNameScore)
+            setFlattenedArray(buildFlattenedArray)
+            console.log('flattendArray', flattenedArray);
         }
     }, [allRanking]) // allRanking が更新されたときに再評価
-    
-    
+    console.log('flattendArray2', flattenedArray);
+
+
     const ranks = [
         {name: 'john1234', count: 12},
         {name: 'ken3354', count: 9},
@@ -71,11 +71,6 @@ function Ranking() {
         {name: 'mary6784', count: 1},
     ]
 
-    const ranking = getCollectionDocuments('ranking')
-
-    console.log(ranking)
-
-
     return (
       <>
           <div className="page">
@@ -83,9 +78,9 @@ function Ranking() {
               <main className="content ranks-content">
                   <div className="ranks-container">
                       {
-                        ranks.map((o, index)=>(
+                        flattenedArray.map((o, index)=>(
                             <div className='rank-wrap' key={index}>
-                                <Rank number={index + 1} name={o.name} count={o.count}/>
+                                <Rank number={index + 1} name={o}/>
                             </div>
                         )
                         )
