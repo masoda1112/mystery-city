@@ -260,11 +260,12 @@ section{
   margin:0 20px;
 
 }
-.number{
+
+.count{
   width: 100%;
-  text-align: left;
   font-size: 30px;
   padding: 10px;
+  text-align: center;
 }
 
 .user-class-name{
@@ -402,6 +403,13 @@ section{
 .ranks-container{
   width: 100%;
   margin: 0;
+}
+
+.number{
+  width: 100%;
+  text-align: left;
+  font-size: 30px;
+  padding: 10px;
 }
 
 /* signuppop, loginpop */

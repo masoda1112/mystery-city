@@ -54,7 +54,7 @@ function Home() {
                             <div className="clear-count">
                                 <div className="clear-count-wrap status-part-wrap">
                                     <p className="title">clear</p>
-                                    <p className="number">{userData.totalScore}</p>
+                                    <p className="count">{userData.totalScore}</p>
                                 </div>
                             </div>
                             <div className="ranking-number">
