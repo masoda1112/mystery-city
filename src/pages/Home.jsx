@@ -41,7 +41,7 @@ function Home() {
         } catch (error) {
           console.error('ログアウトエラー:', error);
         }
-      };
+    };
     return (
         <>
             <div className="page">

@@ -1,12 +1,12 @@
 import { async } from "@firebase/util";
-import { collection, query, where, getDocs, getDoc, setDoc, doc, updateDoc, arrayUnion} from "firebase/firestore";
+import { collection, query, where, getDocs, getDoc, setDoc, addDoc, doc, updateDoc, arrayUnion} from "firebase/firestore";
 import { Firestore } from "../firebaseConfig";
 
 
 // ドキュメントの中で一致するものを検索する関数
 export async function getDocumentsByCondition(collectionName, field, operator, value) {
   // クエリを作成
-  const q = query(collection(Firestore, collectionName), where(field, operator, value));
+  const q = query(collection(Firestore, collectionName), where(field, operator, value))
   
   // クエリを実行
   const querySnapshot = await getDocs(q);
@@ -37,6 +37,18 @@ export async function getCollectionDocuments(collectionName) {
 }
 
 // 新しいドキュメントを追加する関数
+export const addNewDocument = async (collectionName,  data) => {
+  try {
+    // コレクションに新しいドキュメントを追加
+    const docRef = await addDoc(collection(Firestore, collectionName), data);
+    console.log("新しいドキュメントが追加されました。ID:", docRef.id);
+  } catch (e) {
+    console.error("ドキュメントの追加に失敗しました:", e);
+  }
+};
+
+
+// 新しいドキュメントを追加する関数(ID付き)
 export const addNewDocumentWithID = async (collectionName, documentID, data) => {
   try {
     const docRef = doc(Firestore, collectionName, documentID)
@@ -45,6 +57,7 @@ export const addNewDocumentWithID = async (collectionName, documentID, data) => 
     console.error("Error adding document: ", error)
   }
 };
+
 
 export const setLocalStorageItem = (key, value) => {
   try {
@@ -87,3 +100,10 @@ export const addToRankArray = async(rank, uid) => {
   }
 };
 
+// ユーザーネームがユニークかどうか確認する関数
+export const checkUserNameExists = async (userName) => {
+  const resultByAPI = await getDocumentsByCondition("userNames", "userName", "==" , userName)
+  console.log(resultByAPI)
+  console.log(resultByAPI.length)
+  return !(resultByAPI.length == 0); // ユーザー名がすでに存在する場合はtrueを返す
+};

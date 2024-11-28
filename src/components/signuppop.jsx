@@ -5,7 +5,7 @@ import { auth, Firestore } from '../firebaseConfig'
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../AppContext'
-import { addNewDocumentWithID, addToRankArray, setLocalStorageItem } from '../functions/function'
+import { addNewDocumentWithID, addToRankArray, setLocalStorageItem , checkUserNameExists, addNewDocument} from '../functions/function'
 
 function SignUpForm() {
     const [formData, setFormData] = useState({
@@ -55,7 +55,7 @@ function SignUpForm() {
     }
 
     // バリデーション関数
-    const validateForm = () => {
+    const validateForm = async() => {
         const newErrors = { userName: "", mail: "", password: "" };
         let isValid = true;
 
@@ -63,18 +63,23 @@ function SignUpForm() {
         if (!formData.userName) {
             newErrors.userName = "ユーザーネームは必須です";
             isValid = false;
-            console.log(newErrors.userName)
+        }
+
+        // 名前がユニークかどうか確認
+        const unique = await checkUserNameExists(formData.userName)
+        if(unique){
+            newErrors.userName = "このユーザーネームは既に使われています。"
+            isValid = false;
         }
 
         // メールアドレスのバリデーション
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
         if (!formData.mail) {
             newErrors.mail = "メールアドレスは必須です";
             isValid = false;
             } else if (!emailRegex.test(formData.mail)) {
             newErrors.mail = "メールアドレスの形式が無効です";
             isValid = false;
-            console.log(newErrors.mail)
         }
 
         // パスワードのバリデーション
@@ -84,8 +89,8 @@ function SignUpForm() {
           } else if (formData.password.length < 8) {
             newErrors.password = "パスワードは8文字以上である必要があります";
             isValid = false;
-            console.log(newErrors.password)
           }
+
 
         setError(newErrors);
         return isValid;
@@ -95,7 +100,7 @@ function SignUpForm() {
     // サインアップの処理
     const handleSignUp = async (e) => {
         e.preventDefault();
-        const isValid = validateForm();  // ここでフォームのバリデーションを実行
+        const isValid = await validateForm();  // ここでフォームのバリデーションを実行
     
         if (!isValid) {
             return; // バリデーションが失敗した場合、処理を中断
@@ -109,15 +114,16 @@ function SignUpForm() {
             // mysteriesStatusをid1~30まで先に保存しておく。全て未購入状態
             const mysteriesStatus = buildDefaultMysteriesStatus()
 
-            // user,userMysteryStatusに新しいdocを追加
+            // user,userMysteryStatus,userNamesに新しいdocを追加
             await addNewDocumentWithID('users', user.uid, userData)
             await addNewDocumentWithID('userMysteryStatus', user.uid, {mysteriesStatus})
+            await addNewDocument('userNames', {'userName': formData.userName})
 
             // ローカルストレージにuser情報格納
             setLocalStorageItem('user', userData)
 
             // rankingに追加
-            await addToRankArray(0, user.uid)
+            await addToRankArray(0, {userName: formData.userName})
             
             // mysteriesにリダイレクト
             navigate('/mysteries'); 
