@@ -1,3 +1,4 @@
+
 *{
   box-sizing: border-box;
   max-width: 500px;
@@ -338,6 +339,10 @@ section{
   border-radius: 13%;
 }
 
+.mystery-pop-content{
+  height: 100%;
+  width: 100%;
+}
 /* cards */
 
 .cards-content{
@@ -423,6 +428,7 @@ section{
   padding: 10%;
   background-color: rgba(0,0,0,0.6);
   display: none;
+  z-index: 100;
 }
 
 .pop-content{

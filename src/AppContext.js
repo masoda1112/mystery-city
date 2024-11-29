@@ -4,12 +4,11 @@ import React, { createContext, useState } from 'react';
 const AppContext = createContext();
 
 function AppProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null)
   const [loginPopup, setLoginPopup] = useState(false);
   const [signUpPopup, setSignUpPopup] = useState(false);
   const [mysteryPopup, setMysteryPopup] = useState(false);
-  const [cardPopup, setCardPopup] = useState(false);
-  const [cards, setCards] = useState(false);
+  const [mysteryDescription, setMysteryDescription] = useState(null);
 
   return (
     <AppContext.Provider value={{ 
@@ -21,10 +20,8 @@ function AppProvider({ children }) {
       setSignUpPopup, 
       mysteryPopup, 
       setMysteryPopup, 
-      cardPopup, 
-      setCardPopup,
-      cards,
-      setCards
+      mysteryDescription,
+      setMysteryDescription
     }}>
       {children}
     </AppContext.Provider>
