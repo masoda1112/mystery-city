@@ -1,6 +1,7 @@
 import { async } from "@firebase/util";
-import { collection, query, where, getDocs, getDoc, setDoc, addDoc, doc, updateDoc, arrayUnion} from "firebase/firestore";
-import { Firestore } from "../firebaseConfig";
+import { collection, query, where, getDocs, getDoc, setDoc, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { ref, getDownloadURL } from "firebase/storage";
+import { Firestore, FirebaseStorage } from "../firebaseConfig";
 
 
 // ドキュメントの中で一致するものを検索する関数
@@ -18,6 +19,29 @@ export async function getDocumentsByCondition(collectionName, field, operator, v
   });
   return results; // 取得したドキュメントの配列を返す
 }
+
+// ドキュメントIDから検索して取得
+export const getDocumentById = async (collectionName, docId) => {
+  try {
+    // 指定したコレクションとドキュメントIDで参照を作成
+    const docRef = doc(Firestore, collectionName, docId);
+    
+    // ドキュメントを取得
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      // データが存在する場合
+      return { id: docSnap.id, ...docSnap.data() };
+    } else {
+      // ドキュメントが見つからない場合
+      console.error("No such document!");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching document:", error);
+    return null;
+  }
+};
 
 // 全ドキュメントを取得する関数
 export async function getCollectionDocuments(collectionName) {
@@ -58,7 +82,7 @@ export const addNewDocumentWithID = async (collectionName, documentID, data) => 
   }
 };
 
-
+// ローカルストレージのアイテムを使用
 export const setLocalStorageItem = (key, value) => {
   try {
     // オブジェクトや配列をJSON文字列に変換して保存
@@ -69,7 +93,7 @@ export const setLocalStorageItem = (key, value) => {
   }
 }
 
-
+// ランクの配列
 export const addToRankArray = async(rank, name) => {
   // rank（クリア数)を文字列に変換し、refを作成
   const docRef = doc(Firestore, "ranking", rank.toString())
@@ -108,6 +132,7 @@ export const checkUserNameExists = async (userName) => {
   return !(resultByAPI.length == 0); // ユーザー名がすでに存在する場合はtrueを返す
 };
 
+// 登録のバリデーション
 export const validateSignup = async(userName, mail, password) => {
     const newErrors = { userName: "", mail: "", password: "" };
     let isValid = true;
@@ -147,6 +172,7 @@ export const validateSignup = async(userName, mail, password) => {
     return isValid ? "" : newErrors
 };
 
+// ログインのバリデーション
 export const validateLogin = async( mail, password) => {
   const newErrors = { userName: "", mail: "", password: "" };
   let isValid = true;
@@ -172,3 +198,18 @@ export const validateLogin = async( mail, password) => {
 
   return isValid ? "" : newErrors
 };
+
+// firebaseから画像取得
+export const fetchImageURL = async (path) => {
+  try {
+    const imageRef = ref(FirebaseStorage, path); // path は Firebase Storage 内のファイルパス
+    console.log('imageRef',imageRef)
+    const url = await getDownloadURL(imageRef);
+    console.log("Image URL:", url);
+    return url;
+  } catch (error) {
+    console.error("Error fetching image URL:", error);
+    return null;
+  }
+};
+

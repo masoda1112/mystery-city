@@ -2,7 +2,7 @@
 import {initializeApp} from 'firebase/app';
 import { Auth, getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { FirebaseStorage, getStorage } from "firebase/storage";
+import { getStorage } from "firebase/storage";
 
 // import { getAnalytics } from "firebase/analytics";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -20,9 +20,8 @@ const firebaseConfig = {
   measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
-
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const Firestore = getFirestore(app);
-// export const FirebaseStorage = getStorage();
+export const FirebaseStorage = getStorage(app);
 // const analytics = getAnalytics(app);

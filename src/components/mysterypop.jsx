@@ -3,10 +3,11 @@ import { AppContext } from '../AppContext'
 import exampleImage from '../assets/mystery.png';
 
 function MysteryPop({url}) {
+    // popupのコントロール
     const {mysteryPopup, setMysteryPopup} = useContext(AppContext)
+    // クリックされたデータ
     const {mysteryDescription, setMysteryDescription} = useContext(AppContext)
 
-    
     return (
         <div className={`pop ${mysteryPopup ? 'shown' : ''}`}>
             <div className="mystery-pop-content">

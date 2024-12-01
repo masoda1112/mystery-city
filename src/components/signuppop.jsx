@@ -82,7 +82,7 @@ function SignUpForm() {
 
             // user,userMysteryStatus,userNamesに新しいdocを追加
             await addNewDocumentWithID('users', user.uid, userData)
-            await addNewDocumentWithID('userMysteryStatus', user.uid, {mysteriesStatus})
+            await addNewDocumentWithID('userMysteryStatus', formData.userName, {mysteriesStatus})
             await addNewDocument('userNames', {'userName': formData.userName})
 
             // ローカルストレージにuser情報格納
