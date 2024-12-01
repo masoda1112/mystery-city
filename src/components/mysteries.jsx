@@ -22,11 +22,11 @@ function MysteriesCollection({}) {
   
           // Step 3: 画像URLをFirebase Storageから取得
           const mysteriesWithDetails = await Promise.all(
-            mysteryDocs.map(async (mystery) => {
+            mysteryDocs.map(async (mystery , index) => {
               const imgURL = await fetchImageURL(mystery.img); // 画像パスからURLを取得
-              console.log('img', imgURL)
   
               return {
+                id: index,
                 name: mystery.name,
                 description: mystery.description,
                 price: mystery.price,
@@ -36,7 +36,6 @@ function MysteriesCollection({}) {
             })
           );
 
-          console.log(mysteriesWithDetails)
   
           // Step 4: Contextにデータを保存
           setMysteries(mysteriesWithDetails);
@@ -83,7 +82,6 @@ function MysteriesCollection({}) {
     // }, [mystery]);
       
     const handleMysteryPopUp = (data) => {
-      console.log("handleM")
       setMysteryPopup(true)
       // setMysteryDescription(data)
     }

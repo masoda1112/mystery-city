@@ -309,23 +309,21 @@ section{
 }
 
 .mystery-wrap{
-  height: 25vh;
+  height: auto;
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
   overflow: hidden;
 }
 
 .mystery{
-  height: 100%;
-  flex-basis: 100%;
+  height: auto;
   width: 100%;
   overflow: hidden;
 }
 
 .mystery-content{
   width: 100%;
-  height: 100%;
-  margin-bottom: 20px;
+  height: auto;
   background-color: #151f28;
 }
 

@@ -203,9 +203,7 @@ export const validateLogin = async( mail, password) => {
 export const fetchImageURL = async (path) => {
   try {
     const imageRef = ref(FirebaseStorage, path); // path は Firebase Storage 内のファイルパス
-    console.log('imageRef',imageRef)
     const url = await getDownloadURL(imageRef);
-    console.log("Image URL:", url);
     return url;
   } catch (error) {
     console.error("Error fetching image URL:", error);

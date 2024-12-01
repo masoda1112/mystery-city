@@ -47,10 +47,8 @@ function Ranking() {
     useEffect(() => {
         if (allRanking) {
             setFlattenedArray(buildFlattenedArray)
-            console.log('flattendArray', flattenedArray);
         }
     }, [allRanking]) // allRanking が更新されたときに再評価
-    console.log('flattendArray2', flattenedArray);
 
 
     const ranks = [
