@@ -231,6 +231,7 @@ export const getDataList = async (listName) => {
           description: data.description,
           price: data.price,
           status: userStatus, // 進行状況がない場合はデフォルト値
+          description: data.description,
           img: imgURL,
         };
       }else if(listName == 'card'){

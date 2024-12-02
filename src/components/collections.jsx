@@ -7,7 +7,7 @@ import { getCollectionDocuments, fetchImageURL, getDocumentById , getDataList} f
 function Collection(props) {
     const { mysteryPopup, setMysteryPopup } = useContext(AppContext)
     const { mysteries, setMysteries } = useContext(AppContext)
-    const { mysteryDescription, setMysteryDescription } = useContext(AppContext) 
+    const { mystery, setMystery } = useContext(AppContext) 
     
     // const [ mysteryImage, setMysteryImage ] = useState()
 
@@ -29,7 +29,7 @@ function Collection(props) {
     const handleMysteryPopUp = (data) => {
       if(props.listName == "mystery"){
         setMysteryPopup(true)
-        // setMysteryDescription(data)
+        setMystery(data)
       }
     }
 

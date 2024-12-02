@@ -340,10 +340,74 @@ section{
   border-radius: 13%;
 }
 
+/* mystery-pop */
+
+.mystery-pop{
+  padding: 0!important;
+  color: white;
+
+}
+
+
 .mystery-pop-content{
-  height: 100%;
+  height: 90%;
+  width: 95%;
+  margin: auto;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  table-layout: fixed;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 5px;
+  padding: 10px;
+  padding-bottom: 20px;
+  
+}
+
+.mystery-pop-content .close-button-wrap{
+  padding:0;
+  padding-bottom: 10px;
+}
+.mystery-top-content{
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  height: 90%;
+  width: 100%;
+  overflow-wrap: break-word;
+  table-layout: fixed;
+}
+
+.mystery-pop-title-wrap {
+  margin: 20px 10px;
+}
+
+.mystery-pop-title-wrap .mystery-title{
+  text-align: left;
+  font-size: 30px;
+}
+
+.mystery-description-wrap {
+  margin-left: 10px;
+  margin-top: 10px;
+  overflow-wrap: break-word;
+  width: 100%;
+
+}
+
+.mystery-description{
+  overflow-wrap: break-word;
+  height: auto;
   width: 100%;
 }
+.mystery-price-wrap {
+  margin-left: 10px;
+  margin-top: 10px;
+  font-size: 20px;
+}
+
 /* cards */
 
 .cards-content{
