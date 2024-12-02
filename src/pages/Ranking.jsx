@@ -4,6 +4,7 @@ import Card from '../components/footer'
 import Rank from '../components/rank'
 import Header from '../components/header'
 import { getCollectionDocuments } from "../functions/function"
+import dummy from "../assets/ranking-header.png"
 
 function Ranking() {
     // ranking取得し格納するstate
@@ -51,29 +52,14 @@ function Ranking() {
     }, [allRanking]) // allRanking が更新されたときに再評価
 
 
-    const ranks = [
-        {name: 'john1234', count: 12},
-        {name: 'ken3354', count: 9},
-        {name: 'masa3456', count: 7},
-        {name: 'mike6434', count: 4},
-        {name: 'mary6784', count: 1},
-        {name: 'john1234', count: 12},
-        {name: 'ken3354', count: 9},
-        {name: 'masa3456', count: 7},
-        {name: 'mike6434', count: 4},
-        {name: 'mary6784', count: 1},
-        {name: 'john1234', count: 12},
-        {name: 'ken3354', count: 9},
-        {name: 'masa3456', count: 7},
-        {name: 'mike6434', count: 4},
-        {name: 'mary6784', count: 1},
-    ]
-
     return (
       <>
           <div className="page">
               <Header title='Ranking'/>
               <main className="content ranks-content">
+                  <div className="ranks-header">
+                      <img className="ranks-header-img" src={dummy}/>
+                  </div>
                   <div className="ranks-container">
                       {
                         flattenedArray.map((o, index)=>(

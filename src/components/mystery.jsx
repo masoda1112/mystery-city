@@ -1,7 +1,7 @@
 import React from 'react'
-import exampleImage from '../assets/mystery.png';
-
+// import { Button } from '@mui/material'
 function Mystery({url}) {
+  
   return (
     <>
       <div className="mystery">

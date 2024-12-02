@@ -45,7 +45,7 @@ function SignUpForm() {
 
     const buildDefaultMysteriesStatus = () =>{
         let arr = []
-        let count = 1
+        let count = 0
         while (count < 30){
             let data = {mystery_id: count, status: 1}
             arr.push(data)

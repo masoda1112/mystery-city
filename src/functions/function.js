@@ -211,3 +211,38 @@ export const fetchImageURL = async (path) => {
   }
 };
 
+// mysteriesとcardsのリスト取得
+export const getDataList = async (listName) => {
+  const listDocs = await getCollectionDocuments(listName)
+  // Step 2: FirestoreからuserMysteryStatusを取得
+  const user = JSON.parse(localStorage.getItem('user'))
+  const userStatusDocs = await getDocumentById("userMysteryStatus", user.userName)
+
+  // Step 3: 画像URLをFirebase Storageから取得
+  const listWithDetails = await Promise.all(
+    listDocs.map(async (data , index) => {
+      const imgURL = await fetchImageURL(data.img); // 画像パスからURLを取得
+      const userStatus = userStatusDocs.mysteriesStatus[index].status
+
+      if(listName == 'mystery'){
+        return {
+          id: index,
+          name: data.name,
+          description: data.description,
+          price: data.price,
+          status: userStatus, // 進行状況がない場合はデフォルト値
+          img: imgURL,
+        };
+      }else if(listName == 'card'){
+        return {
+          id: index,
+          name: data.name,
+          status: userStatus,
+          img: imgURL,
+        };
+      }
+    })
+  );
+
+  return listWithDetails
+};

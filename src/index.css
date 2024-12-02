@@ -35,7 +35,7 @@ code {
   justify-content: space-between;
   overflow: scroll;
   padding-bottom: 100px;
-  margin-top: 80px;
+  margin-top: 60px;
 }
 
 .page{
@@ -215,13 +215,15 @@ section{
   width: 100%;
   padding-top: 20px;
   padding-bottom: 10px;
-  height: 80px;
+  padding-left: 10px;
+  height: 60px;
   border-bottom: 1px solid gray;
 }
 
 .title-wrap .title{
-  font-size: 30px;
-  text-align: center;
+  font-size: 20px;
+  text-align: left;
+  color: gray
 }
 
 /* home */
@@ -274,7 +276,7 @@ section{
   font-size: 20px;
   padding: 10px;
 }
-.name-wrap{
+.home-content .name-wrap{
   font-size: 30px;
   margin-left: 20px;
 }
@@ -392,6 +394,18 @@ section{
   justify-content: start;
 }
 
+.ranks-header{
+  height: auto;
+  width: auto;
+  text-align: center;
+  margin: 0;
+}
+
+.ranks-header-img{
+  height: auto;
+  width: 70%;
+}
+
 .title-wrap{
   position: fixed;
   background-color: white;
@@ -402,6 +416,7 @@ section{
   flex-direction: row;
   padding: 10px 30px;
   border-bottom: 1px solid gray;
+  font-size: 16px;
 }
 
 .ranks-container{
@@ -412,8 +427,11 @@ section{
 .number{
   width: 100%;
   text-align: left;
-  font-size: 30px;
-  padding: 10px;
+  padding: 5px;
+}
+
+.rank .name-wrap{
+  margin-left: 0;
 }
 
 /* signuppop, loginpop */

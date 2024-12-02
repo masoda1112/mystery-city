@@ -2,7 +2,7 @@ import React from 'react'
 import Button from '@mui/material/Button'
 import Footer from '../components/footer'
 import ButtonContent from '../components/button'
-import MysteriesCollection from '../components/mysteries'
+import Collection from '../components/collections'
 import Header from '../components/header'
 import MysteryPop from '../components/mysterypop'
 
@@ -11,9 +11,9 @@ function Mysteries() {
     return (
       <>
           <div className="page">
-                <Header title={"Mysteries"}/>
+                <Header title={"Mystery"}/>
                 <main className="content">
-                  <MysteriesCollection/>
+                  <Collection listName={"mystery"}/>
                 </main>
                 <MysteryPop />
                 <Footer />
