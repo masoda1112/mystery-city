@@ -8,8 +8,8 @@ function Footer() {
     const handleHome = () => {
         navigate('/home')
     }
-    const handleMysteries = () => {
-        navigate('/mysteries')
+    const handleAnswer = () => {
+        navigate('/answer')
     }
     const handleClear = () => {
         navigate('/card')
@@ -23,7 +23,7 @@ function Footer() {
         <div className="footer">
             <div className="footer-content">
                 <div className={`footer-part footer-part-1 ${location == "/home" ? "opacity-100" : ""}`} onClick={handleHome}></div>
-                <div className={`footer-part footer-part-2 ${location == "/mysteries" ? "opacity-100" : ""}`} onClick={handleMysteries}></div>
+                <div className={`footer-part footer-part-2 ${location == "/answer" ? "opacity-100" : ""}`} onClick={handleAnswer}></div>
                 <div className={`footer-part footer-part-3 ${location == "/card" ? "opacity-100" : ""}`} onClick={handleClear}></div>
                 <div className={`footer-part footer-part-4 ${location == "/ranking" ? "opacity-100" : ""}`} onClick={handleRanking}></div>
             </div>

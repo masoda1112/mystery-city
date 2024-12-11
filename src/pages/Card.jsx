@@ -4,7 +4,6 @@ import Footer from '../components/footer'
 import ButtonContent from '../components/button'
 import Collection from '../components/collections'
 import Header from '../components/header'
-import MysteryPop from '../components/mysterypop'
 
 function Card() {
     return (
@@ -15,7 +14,6 @@ function Card() {
                     <Collection listName="card"/>
                 </main>
                 <Footer />
-                <MysteryPop />
           </div>
       </>
     );

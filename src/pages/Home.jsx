@@ -6,6 +6,7 @@ import { getDocumentsByCondition } from '../functions/function';
 import { AuthContext } from '../AuthContext'
 import { AppContext } from '../AppContext'
 import { async } from '@firebase/util';
+import Header from '../components/header';
 
 function Home() {
     // userRankの判断
@@ -45,6 +46,7 @@ function Home() {
     return (
         <>
             <div className="page">
+                <Header title='Profile'/>
                 <main className="home-content content jp">
                     <div className="content-top">
                         <div className="name-wrap">

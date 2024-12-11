@@ -1,21 +1,20 @@
 import React, { useContext, useEffect , useState} from 'react';
-import Mystery from './mystery';
+import Card from './card';
 import { AppContext } from '../AppContext'
 import { getCollectionDocuments, fetchImageURL, getDocumentById , getDataList} from '../functions/function'
 
 
 function Collection(props) {
-    const { mysteryPopup, setMysteryPopup } = useContext(AppContext)
-    const { mysteries, setMysteries } = useContext(AppContext)
-    const { mystery, setMystery } = useContext(AppContext) 
+    const { collections, setCollections } = useContext(AppContext)
+    const { answer, setAnswer } = useContext(AppContext) 
     
     // const [ mysteryImage, setMysteryImage ] = useState()
 
     const fetchData = async () => {
       try {
-        const mysteriesWithDetails = await getDataList(props.listName)
+        const collectionsWithDetails = await getDataList(props.listName)
         // Step 4: Contextにデータを保存
-        setMysteries(mysteriesWithDetails);
+        setCollections(collectionsWithDetails);
       } catch (error) {
         console.error("データの取得に失敗しました:", error);
       }
@@ -23,13 +22,12 @@ function Collection(props) {
 
     useEffect(() => {
       fetchData();
-    }, [setMysteries]);
+    }, [setAnswer]);
 
       
-    const handleMysteryPopUp = (data) => {
+    const handleCorrectPopUp = (data) => {
       if(props.listName == "mystery"){
-        setMysteryPopup(true)
-        setMystery(data)
+        setAnswer(data)
       }
     }
 
@@ -38,14 +36,14 @@ function Collection(props) {
       <>
         <div className="mysteries-wrap">
             <div className="mysteries">
-            {mysteries?.length > 0 ? (
-              mysteries.map((c, index) => (
+            {collections?.length > 0 ? (
+              collections.map((c, index) => (
                 <div
                   className="mystery-wrap"
                   key={index}
-                  onClick={() => handleMysteryPopUp(c)}
+                  onClick={() => handleCorrectPopUp(c)}
                 >
-                  <Mystery url={c.img} />
+                  <Card url={c.img} />
                 </div>
               ))
             ) : (

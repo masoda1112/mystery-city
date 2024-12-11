@@ -1,7 +1,7 @@
 import './App.css'
 import Top from './pages/Top'
 import Home from './pages/Home'
-import Mysteries from './pages/Mysteries'
+import Answer from './pages/Answer'
 import Ranking from './pages/Ranking'
 import Card from './pages/Card'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -15,7 +15,7 @@ function App() {
           <Routes>
             <Route exact path="/" Component={Top}/>
             <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-            <Route path="/mysteries" element={<ProtectedRoute><Mysteries /></ProtectedRoute>} />
+            <Route path="/answer" element={<ProtectedRoute><Answer /></ProtectedRoute>} />
             <Route path="/card" element={<ProtectedRoute><Card /></ProtectedRoute>} />
             <Route path="/ranking" element={<ProtectedRoute><Ranking /></ProtectedRoute>} />
           </Routes>

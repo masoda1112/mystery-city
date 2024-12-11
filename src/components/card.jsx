@@ -1,6 +1,6 @@
 import React from 'react'
 // import { Button } from '@mui/material'
-function Mystery({url}) {
+function Card({url}) {
   
   return (
     <>
@@ -11,4 +11,4 @@ function Mystery({url}) {
   );
 }
 
-export default Mystery;
+export default Card;

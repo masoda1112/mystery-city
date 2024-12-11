@@ -7,9 +7,9 @@ function AppProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loginPopup, setLoginPopup] = useState(false);
   const [signUpPopup, setSignUpPopup] = useState(false);
-  const [mysteryPopup, setMysteryPopup] = useState(false);
-  const [mysteries, setMysteries] = useState(null);
-  const [mystery, setMystery] = useState(null);
+  const [correctPopup, setCorrectPopup] = useState(false);
+  const [collections, setCollections] = useState(null);
+  const [answer, setAnswer] = useState(null);
 
   return (
     <AppContext.Provider value={{ 
@@ -19,12 +19,12 @@ function AppProvider({ children }) {
       setLoginPopup, 
       signUpPopup, 
       setSignUpPopup, 
-      mysteryPopup, 
-      setMysteryPopup, 
-      mysteries,
-      setMysteries,
-      mystery,
-      setMystery
+      correctPopup, 
+      setCorrectPopup, 
+      collections,
+      setCollections,
+      answer,
+      setAnswer
     }}>
       {children}
     </AppContext.Provider>
