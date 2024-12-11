@@ -47,7 +47,7 @@ function SignUpForm() {
         let arr = []
         let count = 0
         while (count < 30){
-            let data = {mystery_id: count, status: 1}
+            let data = {mystery_id: count, status: 0}
             arr.push(data)
             count ++
         }

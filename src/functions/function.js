@@ -20,6 +20,20 @@ export async function getDocumentsByCondition(collectionName, field, operator, v
   return results; // 取得したドキュメントの配列を返す
 }
 
+const getDocSupport = async(docRef)=>{
+      // ドキュメントを取得
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        // データが存在する場合
+        return { id: docSnap.id, ...docSnap.data() };
+      } else {
+        // ドキュメントが見つからない場合
+        console.error("No such document!");
+        return null;
+      }
+}
+
 // ドキュメントIDから検索して取得
 export const getDocumentById = async (collectionName, docId) => {
   try {
@@ -27,16 +41,8 @@ export const getDocumentById = async (collectionName, docId) => {
     const docRef = doc(Firestore, collectionName, docId);
     
     // ドキュメントを取得
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      // データが存在する場合
-      return { id: docSnap.id, ...docSnap.data() };
-    } else {
-      // ドキュメントが見つからない場合
-      console.error("No such document!");
-      return null;
-    }
+    const data = await getDocSupport(docRef)
+    return data
   } catch (error) {
     console.error("Error fetching document:", error);
     return null;
@@ -58,6 +64,29 @@ export async function getCollectionDocuments(collectionName) {
         console.error("データの取得に失敗しました:", error);
         return []; // エラー時は空配列を返す
     }
+}
+
+// userMysteryStatusを検索し、アップデートする関数
+export const updateUserMysteryStatus = async(userName, updateData) => {
+  // userNameに一致するdocumentを取得
+  try{
+    const docRef = doc(Firestore, 'userMysteryStatus', userName);
+    const data = await getDocSupport(docRef)
+    // mysteriesStatusの中で該当するstatusを更新
+    const statusArray = data.mysteriesStatus
+    const updatedStatusArray = statusArray.map((item) => {
+      if(item.mystery_id == updateData) {
+        return { ...item, status: 1 };
+      }
+      return item
+    })
+  
+    await updateDoc(docRef, { mysteriesStatus: updatedStatusArray });
+
+  }catch (error) {
+    console.error("更新時にエラーが発生しました:", error);
+  }
+  
 }
 
 // 新しいドキュメントを追加する関数

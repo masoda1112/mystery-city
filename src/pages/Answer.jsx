@@ -6,7 +6,7 @@ import Collection from '../components/collections'
 import Header from '../components/header'
 import CorrectPop from '../components/correctpop'
 import { TextField, Button, Box, Typography} from '@mui/material'
-import {getDocumentsByCondition} from '../functions/function'
+import {getDocumentsByCondition, updateUserMysteryStatus} from '../functions/function'
 
 function Answer() {
     // フォームデータの読み込み
@@ -23,6 +23,7 @@ function Answer() {
     const {correctPopup, setCorrectPopup} = useContext(AppContext)
     const {answer, setAnswer} = useContext(AppContext)
 
+    // 答えを送信し、確認
     const sendAnswer = async(e) => {
       e.preventDefault();
       // APIで回答を検索
@@ -37,6 +38,11 @@ function Answer() {
           setAnswer(answerData)
           setCorrectPopup(true)
           setError(false)
+          // mysteryStatusを更新（非同期処理で良いのでawaitいらない?）
+          if(answerData[0].mystery_id != null){
+            let userData = JSON.parse(localStorage.getItem('user'))
+            updateUserMysteryStatus(userData.userName, answerData[0].mystery_id)
+          }
         }
       }catch(error){
 
