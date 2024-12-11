@@ -7,6 +7,7 @@ import Header from '../components/header'
 import CorrectPop from '../components/correctpop'
 import { TextField, Button, Box, Typography} from '@mui/material'
 import {getDocumentsByCondition, updateUserMysteryStatus} from '../functions/function'
+import { PacmanLoader } from "react-spinners"
 
 function Answer() {
     // フォームデータの読み込み
@@ -22,14 +23,15 @@ function Answer() {
     };
     const {correctPopup, setCorrectPopup} = useContext(AppContext)
     const {answer, setAnswer} = useContext(AppContext)
+    const { loading, setLoading } = useContext(AppContext)
 
     // 答えを送信し、確認
     const sendAnswer = async(e) => {
       e.preventDefault();
       // APIで回答を検索
       try{
+        setLoading(true)
         const answerData = await getDocumentsByCondition('answers', 'answer', '==', formData.answer)
-        console.log(answerData.length)
         // 正解だったらpopupを表示
         if(answerData.length == 0){
           console.log('不正解')
@@ -46,6 +48,8 @@ function Answer() {
         }
       }catch(error){
 
+      }finally{
+        setLoading(false)
       }
 
     }
@@ -74,6 +78,11 @@ function Answer() {
                     回答を送信
                 </Button>
               </Box>
+              {loading && (
+                <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
+                    <PacmanLoader color="#000000" loading={loading} size={25} />
+                </div>
+              )}
             </main>
             <CorrectPop />
             <Footer />

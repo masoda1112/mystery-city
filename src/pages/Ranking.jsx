@@ -1,16 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Footer from '../components/footer'
 import Card from '../components/footer'
 import Rank from '../components/rank'
 import Header from '../components/header'
 import { getCollectionDocuments } from "../functions/function"
 import dummy from "../assets/ranking-header.png"
+import { PacmanLoader } from "react-spinners"
+import {AppContext} from '../AppContext'
+
 
 function Ranking() {
     // ranking取得し格納するstate
     const [allRanking, setAllRanking] = useState([])
     const [userNameScore, setUserNameScore] = useState([])
     const [flattenedArray, setFlattenedArray] = useState([])
+    const { loading, setLoading } = useContext(AppContext)
 
     // allRankingから平な配列を作る関数
     const buildFlattenedArray = () => {
@@ -42,7 +46,14 @@ function Ranking() {
             setAllRanking(data)
             // setUserNameScore(userData)
         }
-        fetchDocuments();
+        try{
+            setLoading(true)
+            fetchDocuments();
+        }catch(e){
+
+        }finally{
+            setLoading(false)
+        }
     }, []);
 
     useEffect(() => {
@@ -70,6 +81,11 @@ function Ranking() {
                         )
                       }
                   </div>
+                  {loading && (
+                    <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
+                        <PacmanLoader color="#000000" loading={loading} size={25} />
+                    </div>
+                    )}
               </main>
               <Footer />
           </div>

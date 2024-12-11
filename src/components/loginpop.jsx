@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { getDocumentsByCondition, validateLogin } from '../functions/function'
 import { AuthContext } from '../AuthContext'
 import { AppContext } from '../AppContext';
+import { PacmanLoader } from "react-spinners"
+
 
 function LoginForm() {
     const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ function LoginForm() {
     const [error, setError] = useState('')
     const navigate = useNavigate()
     const {user, setUser} = useContext(AppContext)
+    const {loading, setLoading} = useContext(AppContext)
 
     const handleChange = (e) => {
         setFormData({
@@ -37,6 +40,7 @@ function LoginForm() {
             return; // バリデーションが失敗した場合、処理を中断
         }
         try {
+            setLoading(true)
             await signInWithEmailAndPassword(auth, formData.mail, formData.password);
             const userData = await getDocumentsByCondition('users', 'mail', '==', formData.mail);
             // データが見つかった場合
@@ -47,7 +51,7 @@ function LoginForm() {
             // setError('User not found');
             }
             // console.log(localStorage)
-            navigate('/mysteries'); 
+            navigate('/answer'); 
         } catch (error) {
             const errors = {mail: "", password: ""}
             if (error.code === "auth/user-not-found") {
@@ -58,6 +62,8 @@ function LoginForm() {
                 errors.mail = "ログインに失敗しました"
             }
             setError(errors)
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -94,6 +100,11 @@ function LoginForm() {
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
             ログイン
         </Button>
+        {loading && (
+            <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
+                <PacmanLoader color="#000000" loading={loading} size={25} />
+            </div>
+        )}
     </Box>
         // <Box component="form" onSubmit={handleLogin} sx={{ maxWidth: 400, mx: "auto", mt: 5 }}>
         //     <Typography variant="h5" gutterBottom>

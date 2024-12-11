@@ -6,6 +6,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../AppContext'
 import { addNewDocumentWithID, addToRankArray, setLocalStorageItem , checkUserNameExists, addNewDocument, validateSignup} from '../functions/function'
+import { PacmanLoader } from "react-spinners"
+
 
 function SignUpForm() {
     const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ function SignUpForm() {
     });
     const [error, setError] = useState('');
     const {user, setUser} = useContext(AppContext)
+    const {loading, setLoading} = useContext(AppContext)
     const navigate = useNavigate();
 
     // フォームデータの読み込み
@@ -73,6 +76,7 @@ function SignUpForm() {
         }
 
         try {
+            setLoading(true)
             const user = await addAuthAcount(auth, formData.mail, formData.password)
             // fireStore用のuserData再定義
             const userData = buildUserData(formData.userName, formData.mail, formData.password)
@@ -92,11 +96,13 @@ function SignUpForm() {
             await addToRankArray(0, formData.userName)
             
             // mysteriesにリダイレクト
-            navigate('/mysteries'); 
+            navigate('/answer'); 
             
         } catch (error) {
             console.log(error.message)
             setError(error.message);
+        }finally{
+            setLoading(false)
         }
     };
     
@@ -146,6 +152,11 @@ function SignUpForm() {
             <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
                 登録
             </Button>
+            {loading && (
+                <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
+                    <PacmanLoader color="#000000" loading={loading} size={25} />
+                </div>
+            )}
         </Box>
     );
 }
