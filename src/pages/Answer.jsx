@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
 import { AppContext } from '../AppContext'
 import Footer from '../components/footer'
 import ButtonContent from '../components/button'
@@ -8,9 +8,12 @@ import CorrectPop from '../components/correctpop'
 import { TextField, Button, Box, Typography} from '@mui/material'
 import {getDocumentsByCondition, updateUserMysteryStatus} from '../functions/function'
 import { PacmanLoader } from "react-spinners"
+import { useNavigate, useLocation } from "react-router-dom"
 
 function Answer() {
     // フォームデータの読み込み
+    const navigate = useNavigate()
+    const location = useLocation()
     const [formData, setFormData] = useState({
       answer: '',
     });
@@ -25,6 +28,21 @@ function Answer() {
     const {answer, setAnswer} = useContext(AppContext)
     const { loading, setLoading } = useContext(AppContext)
 
+    const handlePathChange = () => {
+      // URLを /new-path に書き換える
+      navigate("/answer", { replace: true }); // replace: 履歴を上書き
+    };
+
+    useEffect(() => {
+      try{
+        if(location.pathname != "/answer"){
+          handlePathChange()
+        }
+      }catch(error){
+          console.log(error)
+      }
+    }, [correctPopup]);
+
     // 答えを送信し、確認
     const sendAnswer = async(e) => {
       e.preventDefault();
@@ -34,7 +52,6 @@ function Answer() {
         const answerData = await getDocumentsByCondition('answers', 'answer', '==', formData.answer)
         // 正解だったらpopupを表示
         if(answerData.length == 0){
-          console.log('不正解')
           setError('何かが違うようだ。')
         }else{
           setAnswer(answerData)
@@ -53,6 +70,8 @@ function Answer() {
       }
 
     }
+
+
     return (
       <>
           <div className="page">

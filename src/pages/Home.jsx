@@ -36,6 +36,7 @@ function Home() {
     const score = userData.totalScore
     const userClass = calUserClass(score)
 
+
     const handleLogout = async () => {
         try {
           await signOut(auth);  // Firebaseのauthからサインアウト
@@ -43,6 +44,9 @@ function Home() {
           console.error('ログアウトエラー:', error);
         }
     };
+
+
+    
     return (
         <>
             <div className="page">

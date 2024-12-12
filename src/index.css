@@ -345,7 +345,6 @@ section{
 .mystery-pop{
   padding: 0!important;
   color: white;
-
 }
 
 
@@ -358,7 +357,8 @@ section{
   flex-direction: column;
   justify-content: space-between;
   table-layout: fixed;
-  background-color: rgba(0,0,0,0.8);
+  background-size: contain;
+  background-repeat: no-repeat;
   border-radius: 5px;
   padding: 10px;
   padding-bottom: 20px;
@@ -370,7 +370,7 @@ section{
   padding-bottom: 10px;
 }
 .mystery-top-content{
-  color: white;
+  /* color: white; */
   display: flex;
   flex-direction: column;
   justify-content: start;
@@ -378,6 +378,10 @@ section{
   width: 100%;
   overflow-wrap: break-word;
   table-layout: fixed;
+}
+.mystery-pop-content .close-button{
+  color: black;
+  font-size: 20px;
 }
 
 .mystery-pop-title-wrap {

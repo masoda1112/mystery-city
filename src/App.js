@@ -18,6 +18,7 @@ function App() {
             <Route path="/answer" element={<ProtectedRoute><Answer /></ProtectedRoute>} />
             <Route path="/card" element={<ProtectedRoute><Card /></ProtectedRoute>} />
             <Route path="/ranking" element={<ProtectedRoute><Ranking /></ProtectedRoute>} />
+            <Route path="*" element={<ProtectedRoute><Answer /></ProtectedRoute>} />
           </Routes>
       </BrowserRouter>
   );

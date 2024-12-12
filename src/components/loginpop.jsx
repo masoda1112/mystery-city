@@ -24,14 +24,14 @@ function LoginForm() {
             ...formData,
             [e.target.name]: e.target.value
         });
-    };
+    }
 
     const validateForm = async() => {
         const newErrors = await validateLogin(formData.mail, formData.password)
         const isValid = newErrors == "" ? true : false
         setError(newErrors)
         return isValid
-    };
+    }
 
     const handleLogin = async (e) => {
         e.preventDefault();

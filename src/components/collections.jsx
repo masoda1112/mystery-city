@@ -18,7 +18,6 @@ function Collection(props) {
         // userMysteryStatusを取得
         const userData = JSON.parse(localStorage.getItem('user'))
         const statusArray = await getDocumentById('userMysteryStatus',userData.userName)
-        console.log(statusArray['mysteriesStatus'])
         // Step 4: Contextにデータを保存
         setCollections(collectionsWithDetails);
         setMysteryStatus(statusArray['mysteriesStatus'])
