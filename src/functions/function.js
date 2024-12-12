@@ -1,5 +1,5 @@
 import { async } from "@firebase/util";
-import { collection, query, where, getDocs, getDoc, setDoc, addDoc, doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { collection, query, where, getDocs, getDoc, setDoc, addDoc, doc, updateDoc, arrayUnion, orderBy, limit, } from "firebase/firestore";
 import { ref, getDownloadURL } from "firebase/storage";
 import { Firestore, FirebaseStorage } from "../firebaseConfig";
 
@@ -66,14 +66,94 @@ export async function getCollectionDocuments(collectionName) {
     }
 }
 
+// 全ドキュメントをソートして取得する関数（ランキング用）
+export const getCollectionDocumentsWithSort = async(collectionName, field) =>{
+  // コレクション参照を作成
+  const rankingsRef = collection(Firestore, collectionName);
+  // クエリを作成（スコア順に並べ、上位10人を取得）
+  const q = query(rankingsRef, orderBy(field, 'desc'), limit(1000));
+  // クエリ実行
+  const querySnapshot = await getDocs(q);
+  const rankings = [];
+  querySnapshot.forEach((doc) => {
+    rankings.push(doc.data());
+  });
+  
+  return rankings
+}
+
+// フィールドの一部を更新する関数（該当するドキュメントは1つだけ）
+export async function updateDocumentField(collectionName, field, operator, value, updateData) {
+  // 条件に一致するドキュメントを取得（必ず1つのドキュメントを返すと仮定）
+  const documents = await getDocumentsByCondition(collectionName, field, operator, value);
+
+  // ドキュメントが見つかれば、最初のドキュメントを更新
+  if (documents.length === 1) {
+    const docData = documents[0]; // 一致するドキュメント（1つ）
+    
+    // 更新したいドキュメントの参照を取得
+    const docRef = doc(Firestore, collectionName, docData.id);
+    
+    // 更新処理
+    try {
+      await updateDoc(docRef, updateData);
+      console.log(`Document with id ${docData.id} updated successfully`);
+    } catch (error) {
+      console.error(`Error updating document with id ${docData.id}:`, error);
+    }
+  } else {
+    if (documents.length === 0) {
+      console.log("No documents found matching the criteria.");
+    } else {
+      console.log("Multiple documents found. Expected exactly one.");
+    }
+  }
+}
+
+
+// userのtotalScoreをアップデートする関数
+export const updateTotalScore = async() => {
+  // userNameに一致するdocumentを取得
+  try{
+    const currentUser = getLocalstorageUser()
+    const updateUser = {...currentUser, totalScore: currentUser.totalScore + 1}
+    const updateRanking = {userName: currentUser.userName, totalScore: currentUser.totalScore + 1}
+    console.log(updateUser)
+    await updateDocumentField('users', 'userName', '==', updateUser.userName, updateUser)
+    await updateDocumentField('ranking', 'userName', '==', updateUser.userName, updateRanking)
+    setLocalStorageItem('user', updateUser)
+  }catch (error) {
+    console.error("更新時にエラーが発生しました:", error);
+  }
+  
+}
+
+
+// クリア時ランキング更新
+// userNameで検索する
+// スコアを1足す（update）
+
+// export const updateRanking = async() =>{
+//   const user = getLocalstorageUser()
+//   const currentScore = user.totalScore
+//   const updateData = {totalScore: currentScore + 1}
+//   console.log(updateData)
+//   await updateDocumentField('ranking', 'userName', '==', user.userName, updateData)
+  
+// }
+
 // userMysteryStatusを検索し、アップデートする関数
-export const updateUserMysteryStatus = async(userName, updateData) => {
+export const updateUserMysteryStatus = async(userName, updateData, answer) => {
   // userNameに一致するdocumentを取得
   try{
     const docRef = doc(Firestore, 'userMysteryStatus', userName);
     const data = await getDocSupport(docRef)
     // mysteriesStatusの中で該当するstatusを更新
     const statusArray = data.mysteriesStatus
+    if(statusArray[answer.mystery_id].status == 0){
+      // updateRanking()
+      updateTotalScore()
+    }
     const updatedStatusArray = statusArray.map((item) => {
       if(item.mystery_id == updateData) {
         return { ...item, status: 1 };
@@ -122,6 +202,7 @@ export const setLocalStorageItem = (key, value) => {
   }
 }
 
+
 // ランクの配列
 export const addToRankArray = async(rank, name) => {
   // rank（クリア数)を文字列に変換し、refを作成
@@ -152,6 +233,7 @@ export const addToRankArray = async(rank, name) => {
     console.error("Error setting item in local storage:", error)
   }
 };
+
 
 // ユーザーネームがユニークかどうか確認する関数
 export const checkUserNameExists = async (userName) => {
@@ -244,7 +326,7 @@ export const fetchImageURL = async (path) => {
 export const getDataList = async (listName) => {
   const listDocs = await getCollectionDocuments(listName)
   // Step 2: FirestoreからuserMysteryStatusを取得
-  const user = JSON.parse(localStorage.getItem('user'))
+  const user = getLocalstorageUser()
   const userStatusDocs = await getDocumentById("userMysteryStatus", user.userName)
 
   // Step 3: 画像URLをFirebase Storageから取得
@@ -276,3 +358,10 @@ export const getDataList = async (listName) => {
 
   return listWithDetails
 };
+
+// localStorageのuserデータ取得
+export const getLocalstorageUser = () =>{
+  const user = JSON.parse(localStorage.getItem('user'))
+  return user
+}
+

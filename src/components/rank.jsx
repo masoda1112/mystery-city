@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Rank({number, name}) {
+function Rank({number, name, score}) {
 
   return (
     <>
@@ -10,6 +10,9 @@ function Rank({number, name}) {
             </div>
             <div className="name-wrap">
                 <p className="name">{name}</p>
+            </div>
+            <div className="totalscore-wrap">
+                <p className="totalscore">{score}</p>
             </div>
         </div>
     </>

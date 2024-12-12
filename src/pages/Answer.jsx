@@ -6,7 +6,7 @@ import Collection from '../components/collections'
 import Header from '../components/header'
 import CorrectPop from '../components/correctpop'
 import { TextField, Button, Box, Typography} from '@mui/material'
-import {getDocumentsByCondition, updateUserMysteryStatus} from '../functions/function'
+import {getDocumentsByCondition, updateUserMysteryStatus, updateTotalScore, updateRanking} from '../functions/function'
 import { PacmanLoader } from "react-spinners"
 import { useNavigate, useLocation } from "react-router-dom"
 
@@ -60,8 +60,8 @@ function Answer() {
           // mysteryStatusを更新（非同期処理で良いのでawaitいらない?）
           if(answerData[0].mystery_id != null){
             let userData = JSON.parse(localStorage.getItem('user'))
-            updateUserMysteryStatus(userData.userName, answerData[0].mystery_id)
-            // userのtotalScoreのアップデート、rankingのアップデート
+            // この中で回答済みか判断し、ランキングとスコアを更新
+            updateUserMysteryStatus(userData.userName, answerData[0].mystery_id, answerData[0])
           }
         }
       }catch(error){

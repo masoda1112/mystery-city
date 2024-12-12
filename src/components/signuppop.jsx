@@ -34,9 +34,10 @@ function SignUpForm() {
         return userCredential.user
     }
 
-    const buildUserData = (name) => {
+    const buildUserData = (name, mail) => {
         const data = {
             userName: name,
+            mail: mail,
             totalScore: 0,
             createdAt: new Date(),
         }
@@ -77,7 +78,7 @@ function SignUpForm() {
             setLoading(true)
             const user = await addAuthAcount(auth, formData.mail, formData.password)
             // fireStore用のuserData再定義
-            const userData = buildUserData(formData.userName)
+            const userData = buildUserData(formData.userName, formData.mail)
             
             // mysteriesStatusをid1~30まで先に保存しておく。全て未購入状態
             const mysteriesStatus = buildDefaultMysteriesStatus()
@@ -89,9 +90,8 @@ function SignUpForm() {
 
             // ローカルストレージにuser情報格納
             setLocalStorageItem('user', userData)
-
             // rankingに追加
-            await addToRankArray(0, formData.userName)
+            await addNewDocument('ranking', {'userName':formData.userName, 'totalScore': 0})
             
             // mysteriesにリダイレクト
             navigate('/answer'); 
