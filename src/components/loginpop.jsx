@@ -18,6 +18,8 @@ function LoginForm() {
     const navigate = useNavigate()
     const {user, setUser} = useContext(AppContext)
     const {loading, setLoading} = useContext(AppContext)
+    const {passwordResetPop, setPasswordResetPop} = useContext(AppContext)
+    const {loginPopup, setLoginPopup} = useContext(AppContext)
 
     const handleChange = (e) => {
         setFormData({
@@ -67,6 +69,10 @@ function LoginForm() {
         }
     }
 
+    const handlePasswordResetPop = () =>{
+        setPasswordResetPop(true)
+        setLoginPopup(false)
+    }
     return (
         <Box component="form" onSubmit={handleLogin} sx={{ maxWidth: 400, mx: "auto", mt: 5 }}>
         <Typography variant="h5" gutterBottom>
@@ -100,6 +106,7 @@ function LoginForm() {
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
             ログイン
         </Button>
+        <p onClick={handlePasswordResetPop} style={{paddingTop: '20px', color: 'red', textDecoration: 'underline'}}>パスワードをお忘れの方はこちら</p>
         {loading && (
             <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
                 <PacmanLoader color="#000000" loading={loading} size={25} />

@@ -61,6 +61,7 @@ function Answer() {
           if(answerData[0].mystery_id != null){
             let userData = JSON.parse(localStorage.getItem('user'))
             updateUserMysteryStatus(userData.userName, answerData[0].mystery_id)
+            // userのtotalScoreのアップデート、rankingのアップデート
           }
         }
       }catch(error){
@@ -68,10 +69,7 @@ function Answer() {
       }finally{
         setLoading(false)
       }
-
     }
-
-
     return (
       <>
           <div className="page">

@@ -34,11 +34,9 @@ function SignUpForm() {
         return userCredential.user
     }
 
-    const buildUserData = (name, mail, password) => {
+    const buildUserData = (name) => {
         const data = {
             userName: name,
-            mail: mail,
-            password: password,
             totalScore: 0,
             createdAt: new Date(),
         }
@@ -79,7 +77,7 @@ function SignUpForm() {
             setLoading(true)
             const user = await addAuthAcount(auth, formData.mail, formData.password)
             // fireStore用のuserData再定義
-            const userData = buildUserData(formData.userName, formData.mail, formData.password)
+            const userData = buildUserData(formData.userName)
             
             // mysteriesStatusをid1~30まで先に保存しておく。全て未購入状態
             const mysteriesStatus = buildDefaultMysteriesStatus()

@@ -12,6 +12,7 @@ function AppProvider({ children }) {
   const [answer, setAnswer] = useState(null);
   const [mysteryStatus, setMysteryStatus] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [passwordResetPop, setPasswordResetPop] = useState(false)
 
   return (
     <AppContext.Provider value={{ 
@@ -21,6 +22,8 @@ function AppProvider({ children }) {
       setLoginPopup, 
       signUpPopup, 
       setSignUpPopup, 
+      passwordResetPop,
+      setPasswordResetPop,
       correctPopup, 
       setCorrectPopup, 
       collections,

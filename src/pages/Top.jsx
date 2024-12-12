@@ -6,15 +6,21 @@ import ButtonContent from '../components/button';
 import SignUpForm from '../components/signuppop';
 import LoginPop from '../components/loginpop';
 import { AppContext } from '../AppContext';
+import PasswordReset from '../components/passwordResetPop';
 
 function Top() {
     const {loginPopup, setLoginPopup} = useContext(AppContext)
     const {signUpPopup, setSignUpPopup} = useContext(AppContext)
+    const {passwordResetPop, setPasswordResetPop} = useContext(AppContext)
+
     const signupClose = () => {
         setSignUpPopup(false)
     }
     const loginClose = () => {
         setLoginPopup(false)
+    }
+    const passwordClose = () => {
+        setPasswordResetPop(false)
     }
 
     useEffect(() => {
@@ -94,6 +100,14 @@ function Top() {
                             <p className='close-button'>×</p>
                         </div>      
                         <LoginPop />
+                    </div>
+                </div>
+                <div className={`pop ${passwordResetPop ? 'shown' : ''}`}>              
+                    <div className="pop-content login-pop-content">
+                        <div className="close-button-wrap" onClick={passwordClose}>
+                            <p className='close-button'>×</p>
+                        </div>      
+                        <PasswordReset />
                     </div>
                 </div>
             </div>
