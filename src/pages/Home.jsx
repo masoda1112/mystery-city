@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Footer from '../components/footer';
 import { auth } from '../firebaseConfig';
 import { signOut } from 'firebase/auth';
@@ -10,6 +10,7 @@ import Header from '../components/header';
 
 function Home() {
     // userRankの判断
+    const [user, setUser] = useState('')
     const calUserClass = (score) => {
         let userClass
         if( score < 1) {
@@ -30,11 +31,16 @@ function Home() {
 
         return userClass
     }
-
-    // const {currentUser} = useContext(AuthContext)
-    let userData = JSON.parse(localStorage.getItem('user'))
-    const score = userData.totalScore
-    const userClass = calUserClass(score)
+    
+    useEffect(()=>{
+        const handleSetUser = async() =>{
+            const userData = JSON.parse(localStorage.getItem('user'))
+            const userInfo = await getDocumentsByCondition('users', 'userName', "==", userData.userName)
+            const score = userInfo[0].totalScore
+            setUser(userInfo[0])
+        }
+        handleSetUser()
+    },[setUser])
 
 
     const handleLogout = async () => {
@@ -49,24 +55,25 @@ function Home() {
     
     return (
         <>
-            <div className="page">
+            {user ? (
+                <div className="page">
                 <Header title='Profile'/>
                 <main className="home-content content jp">
                     <div className="content-top">
                         <div className="name-wrap">
-                            <p className="name">{userData.userName}</p>
+                            <p className="name">{user.userName}</p>
                         </div>
                         <div className="status-wrap">
                             <div className="clear-count">
                                 <div className="clear-count-wrap status-part-wrap">
                                     <p className="title">clear</p>
-                                    <p className="count">{userData.totalScore}</p>
+                                    <p className="count">{user.totalScore}</p>
                                 </div>
                             </div>
                             <div className="ranking-number">
                                 <div className="ranking-number-wrap status-part-wrap">
                                     <p className="title">class</p>
-                                    <p className="user-class-name">{userClass}</p>
+                                    <p className="user-class-name">{calUserClass(user.totalScore)}</p>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +83,11 @@ function Home() {
                     </div>
                 </main>
                 <Footer />
-            </div>
+                </div>
+            ):
+            <div></div>
+        }
+            
         </>
     );
 }

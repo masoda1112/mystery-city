@@ -112,12 +112,13 @@ export async function updateDocumentField(collectionName, field, operator, value
 
 
 // userのtotalScoreをアップデートする関数
-export const updateTotalScore = async() => {
+export const updateTotalScore = async(userName) => {
   // userNameに一致するdocumentを取得
   try{
-    const currentUser = getLocalstorageUser()
-    const updateUser = {...currentUser, totalScore: currentUser.totalScore + 1}
-    const updateRanking = {userName: currentUser.userName, totalScore: currentUser.totalScore + 1}
+    const currentUser = await getDocumentsByCondition('users', 'userName', '==', userName)
+    console.log('currentUser', currentUser[0])
+    const updateUser = {...currentUser[0], totalScore: currentUser[0].totalScore + 1}
+    const updateRanking = {userName: currentUser[0].userName, totalScore: currentUser[0].totalScore + 1}
     console.log(updateUser)
     await updateDocumentField('users', 'userName', '==', updateUser.userName, updateUser)
     await updateDocumentField('ranking', 'userName', '==', updateUser.userName, updateRanking)
@@ -139,7 +140,6 @@ export const updateTotalScore = async() => {
 //   const updateData = {totalScore: currentScore + 1}
 //   console.log(updateData)
 //   await updateDocumentField('ranking', 'userName', '==', user.userName, updateData)
-  
 // }
 
 // userMysteryStatusを検索し、アップデートする関数
@@ -152,7 +152,7 @@ export const updateUserMysteryStatus = async(userName, updateData, answer) => {
     const statusArray = data.mysteriesStatus
     if(statusArray[answer.mystery_id].status == 0){
       // updateRanking()
-      updateTotalScore()
+      updateTotalScore(userName)
     }
     const updatedStatusArray = statusArray.map((item) => {
       if(item.mystery_id == updateData) {
