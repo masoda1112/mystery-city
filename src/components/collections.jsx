@@ -14,6 +14,7 @@ function Collection(props) {
     const fetchData = async () => {
       try {
         // cardsを取得
+        setLoading(true)
         const collectionsWithDetails = await getDataList(props.listName)
         // userMysteryStatusを取得
         const userData = JSON.parse(localStorage.getItem('user'))
@@ -22,15 +23,14 @@ function Collection(props) {
         setCollections(collectionsWithDetails);
         setMysteryStatus(statusArray['mysteriesStatus'])
       } catch (error) {
-        console.error("データの取得に失敗しました:", error);
+        console.error("データの取得に失敗しました:", error)
       }finally {
         // リクエストが終了したらローディングを非表示にする
-        setLoading(false);
+        setLoading(false)
       }
     };
 
     useEffect(() => {
-      setLoading(true)
       fetchData();
     }, [setCollections]);
 
