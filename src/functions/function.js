@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import { collection, query, where, getDocs, getDoc, setDoc, addDoc, doc, updateDoc, arrayUnion, orderBy, limit, } from "firebase/firestore";
 import { ref, getDownloadURL } from "firebase/storage";
 import { Firestore, FirebaseStorage } from "../firebaseConfig";
@@ -6,41 +5,30 @@ import { Firestore, FirebaseStorage } from "../firebaseConfig";
 
 // ドキュメントの中で一致するものを検索する関数
 export async function getDocumentsByCondition(collectionName, field, operator, value) {
-  // クエリを作成
   const q = query(collection(Firestore, collectionName), where(field, operator, value))
-  
-  // クエリを実行
   const querySnapshot = await getDocs(q);
-  
-  // 結果を格納する配列
   const results = [];
   querySnapshot.forEach((doc) => {
     results.push({ id: doc.id, ...doc.data() });
   });
-  return results; // 取得したドキュメントの配列を返す
+  return results; 
 }
 
+// getDocumentByIdのサポート関数
 const getDocSupport = async(docRef)=>{
-      // ドキュメントを取得
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        // データが存在する場合
-        return { id: docSnap.id, ...docSnap.data() };
-      } else {
-        // ドキュメントが見つからない場合
-        console.error("No such document!");
-        return null;
-      }
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return { id: docSnap.id, ...docSnap.data() };
+  } else {
+    console.error("No such document!");
+    return null;
+  }
 }
 
 // ドキュメントIDから検索して取得
 export const getDocumentById = async (collectionName, docId) => {
   try {
-    // 指定したコレクションとドキュメントIDで参照を作成
     const docRef = doc(Firestore, collectionName, docId);
-    
-    // ドキュメントを取得
     const data = await getDocSupport(docRef)
     return data
   } catch (error) {
@@ -51,28 +39,25 @@ export const getDocumentById = async (collectionName, docId) => {
 
 // 全ドキュメントを取得する関数
 export async function getCollectionDocuments(collectionName) {
-    const collectionRef = collection(Firestore, collectionName);
-    try {
-        const querySnapshot = await getDocs(collectionRef); // 全ドキュメント取得
-        const documents = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-        }));
-        return documents;
+  const collectionRef = collection(Firestore, collectionName);
+  try {
+      const querySnapshot = await getDocs(collectionRef); 
+      const documents = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+      }));
+      return documents;
 
-    } catch (error) {
-        console.error("データの取得に失敗しました:", error);
-        return []; // エラー時は空配列を返す
-    }
+  } catch (error) {
+      console.error("データの取得に失敗しました:", error);
+      return []; 
+  }
 }
 
 // 全ドキュメントをソートして取得する関数（ランキング用）
 export const getCollectionDocumentsWithSort = async(collectionName, field) =>{
-  // コレクション参照を作成
   const rankingsRef = collection(Firestore, collectionName);
-  // クエリを作成（スコア順に並べ、上位10人を取得）
   const q = query(rankingsRef, orderBy(field, 'desc'), limit(1000));
-  // クエリ実行
   const querySnapshot = await getDocs(q);
   const rankings = [];
   querySnapshot.forEach((doc) => {
@@ -84,17 +69,11 @@ export const getCollectionDocumentsWithSort = async(collectionName, field) =>{
 
 // フィールドの一部を更新する関数（該当するドキュメントは1つだけ）
 export async function updateDocumentField(collectionName, field, operator, value, updateData) {
-  // 条件に一致するドキュメントを取得（必ず1つのドキュメントを返すと仮定）
   const documents = await getDocumentsByCondition(collectionName, field, operator, value);
-
   // ドキュメントが見つかれば、最初のドキュメントを更新
   if (documents.length === 1) {
     const docData = documents[0]; // 一致するドキュメント（1つ）
-    
-    // 更新したいドキュメントの参照を取得
     const docRef = doc(Firestore, collectionName, docData.id);
-    
-    // 更新処理
     try {
       await updateDoc(docRef, updateData);
       console.log(`Document with id ${docData.id} updated successfully`);
@@ -110,64 +89,59 @@ export async function updateDocumentField(collectionName, field, operator, value
   }
 }
 
+// rankingをアップデートする関数
+const updateRanking = async(currentUser, updateUser) =>{
+  const updateRanking = {userName: currentUser[0].userName, totalScore: currentUser[0].totalScore + 1}
+  await updateDocumentField('ranking', 'userName', '==', updateUser.userName, updateRanking)
+}
 
 // userのtotalScoreをアップデートする関数
-export const updateTotalScore = async(userName) => {
-  // userNameに一致するdocumentを取得
-  try{
-    const currentUser = await getDocumentsByCondition('users', 'userName', '==', userName)
-    console.log('currentUser', currentUser[0])
+const updateTotalScore = async(currentUser) => {
     const updateUser = {...currentUser[0], totalScore: currentUser[0].totalScore + 1}
-    const updateRanking = {userName: currentUser[0].userName, totalScore: currentUser[0].totalScore + 1}
-    console.log(updateUser)
     await updateDocumentField('users', 'userName', '==', updateUser.userName, updateUser)
-    await updateDocumentField('ranking', 'userName', '==', updateUser.userName, updateRanking)
     setLocalStorageItem('user', updateUser)
-  }catch (error) {
-    console.error("更新時にエラーが発生しました:", error);
-  }
-  
+
+    return updateUser
 }
 
+// userMysteryStatusをアップデートする
+const updateUserMysteryStatus = async(statusArray, updateData, docRef) => {
+  const updatedStatusArray = statusArray.map((item) => {
+    if(item.mystery_id == updateData) {
+      return { ...item, status: 1 };
+    }
+    return item
+  })  
+  await updateDoc(docRef, { mysteriesStatus: updatedStatusArray });
+}
 
-// クリア時ランキング更新
-// userNameで検索する
-// スコアを1足す（update）
-
-// export const updateRanking = async() =>{
-//   const user = getLocalstorageUser()
-//   const currentScore = user.totalScore
-//   const updateData = {totalScore: currentScore + 1}
-//   console.log(updateData)
-//   await updateDocumentField('ranking', 'userName', '==', user.userName, updateData)
-// }
-
-// userMysteryStatusを検索し、アップデートする関数
-export const updateUserMysteryStatus = async(userName, updateData, answer) => {
-  // userNameに一致するdocumentを取得
-  try{
+// mysteryStatusをチェック
+const getMysteryStatus = async(userName) =>{
+    // mysterystatusを確認
     const docRef = doc(Firestore, 'userMysteryStatus', userName);
     const data = await getDocSupport(docRef)
-    // mysteriesStatusの中で該当するstatusを更新
-    const statusArray = data.mysteriesStatus
-    if(statusArray[answer.mystery_id].status == 0){
-      // updateRanking()
-      updateTotalScore(userName)
-    }
-    const updatedStatusArray = statusArray.map((item) => {
-      if(item.mystery_id == updateData) {
-        return { ...item, status: 1 };
-      }
-      return item
-    })
-  
-    await updateDoc(docRef, { mysteriesStatus: updatedStatusArray });
-
-  }catch (error) {
-    console.error("更新時にエラーが発生しました:", error);
-  }
-  
+    return {data: data, docRef: docRef}
 }
+
+// クリア時のアップデートの処理
+export const updateWhenClear = async(userName, updateData, answer)=>{
+    // userNameに一致するdocumentを取得
+    try{
+      // mysterystatusを確認
+      const {data, docRef} = await getMysteryStatus(userName)
+      // mysteriesStatusの中で該当するstatusを更新
+      const statusArray = data.mysteriesStatus
+      if(statusArray[answer.mystery_id].status == 0){
+        const currentUser = await getDocumentsByCondition('users', 'userName', '==', userName)
+        const updateUser = await updateTotalScore(currentUser)
+        updateRanking(currentUser, updateUser)
+      }
+      updateUserMysteryStatus(statusArray, updateData, docRef) 
+    }catch (error) {
+      console.error("更新時にエラーが発生しました:", error);
+    }
+}
+
 
 // 新しいドキュメントを追加する関数
 export const addNewDocument = async (collectionName,  data) => {
@@ -238,8 +212,6 @@ export const addToRankArray = async(rank, name) => {
 // ユーザーネームがユニークかどうか確認する関数
 export const checkUserNameExists = async (userName) => {
   const resultByAPI = await getDocumentsByCondition("userNames", "userName", "==" , userName)
-  console.log(resultByAPI)
-  console.log(resultByAPI.length)
   return !(resultByAPI.length == 0); // ユーザー名がすでに存在する場合はtrueを返す
 };
 
@@ -364,4 +336,3 @@ export const getLocalstorageUser = () =>{
   const user = JSON.parse(localStorage.getItem('user'))
   return user
 }
-

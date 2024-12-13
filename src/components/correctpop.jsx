@@ -7,14 +7,16 @@ function CorrectPop({}) {
     // popupのコントロール
     const {correctPopup, setCorrectPopup} = useContext(AppContext)
     // クリックされたデータ
-    const {answer, setAnswer} = useContext(AppContext)
+    const {answer} = useContext(AppContext)
     const [img, setImg] = useState('')
-
+    const correctPopClose = () => {
+        setCorrectPopup(false)
+        setImg('')
+    }
     useEffect(() => {
         // answerのimgからstorageの画像取得
         const getImg = async() =>{
             const url = await fetchImageURL(answer[0].img)
-            console.log(url)
             setImg(url)
         }
         try{
@@ -23,10 +25,6 @@ function CorrectPop({}) {
             console.log(error)
         }
       }, [correctPopup]);
-    const correctPopClose = () => {
-        setCorrectPopup(false)
-        setImg('')
-    }
     return (
         img ?  (
             <div className={`pop mystery-pop ${correctPopup ? 'shown' : ''}`} >

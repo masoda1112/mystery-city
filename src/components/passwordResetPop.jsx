@@ -11,7 +11,6 @@ const PasswordReset = () => {
 
     // リセットリンクを送信の処理
     const resetPassword = async (mail) => {
-        console.log(mail)
         try {
           await sendPasswordResetEmail(auth, mail);
           alert("パスワードリセットメールを送信しました。");

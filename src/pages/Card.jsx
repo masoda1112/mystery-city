@@ -8,23 +8,25 @@ import { PacmanLoader } from "react-spinners"
 import { AppContext } from "../AppContext"
 
 function Card() {
-  const { loading, setLoading } = useContext(AppContext)
+  const {setLoading } = useContext(AppContext)
+
   useEffect(() => {
     // 例えば、データのフェッチなどでローディングを表示
-    setLoading(true);
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 3000); // 3秒後にローディングを非表示
-    return () => clearTimeout(timer);
+    try{
+      setLoading(true);
+    }catch(error){
+        console.log(error)
+    }finally{
+      setLoading(false)
+    }
   }, [setLoading]);
+
     return (
       <>
           <div className="page">
-                <Header title={"Card"}/>
-                <main className="content">
-                    <Collection listName="card"/>
-                </main>
-                <Footer />
+            <main className="content">
+                <Collection listName="card"/>
+            </main>
           </div>
       </>
     );

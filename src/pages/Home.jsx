@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import Footer from '../components/footer';
 import { auth } from '../firebaseConfig';
 import { signOut } from 'firebase/auth';
-import { getDocumentsByCondition } from '../functions/function';
+import { getDocumentsByCondition, getLocalstorageUser } from '../functions/function';
 import { AuthContext } from '../AuthContext'
 import { AppContext } from '../AppContext'
 import { async } from '@firebase/util';
@@ -11,6 +11,8 @@ import Header from '../components/header';
 function Home() {
     // userRankの判断
     const [user, setUser] = useState('')
+
+    // totalScoreから階級を取得
     const calUserClass = (score) => {
         let userClass
         if( score < 1) {
@@ -28,21 +30,16 @@ function Home() {
         }else{
             userClass = '準備中'
         }
-
         return userClass
     }
-    
-    useEffect(()=>{
-        const handleSetUser = async() =>{
-            const userData = JSON.parse(localStorage.getItem('user'))
-            const userInfo = await getDocumentsByCondition('users', 'userName', "==", userData.userName)
-            const score = userInfo[0].totalScore
-            setUser(userInfo[0])
-        }
-        handleSetUser()
-    },[setUser])
+    // firestoreのuserdataを取得し、stateにセット
+    const handleSetUser = async() =>{
+        const userData = getLocalstorageUser()
+        const userInfo = await getDocumentsByCondition('users', 'userName', "==", userData.userName)
+        setUser(userInfo[0])
+    }
 
-
+    // ログアウトの処理
     const handleLogout = async () => {
         try {
           await signOut(auth);  // Firebaseのauthからサインアウト
@@ -51,38 +48,39 @@ function Home() {
         }
     };
 
+    useEffect(()=>{
+        handleSetUser()
+    },[setUser])
 
-    
+
     return (
         <>
             {user ? (
                 <div className="page">
-                <Header title='Profile'/>
-                <main className="home-content content jp">
-                    <div className="content-top">
-                        <div className="name-wrap">
-                            <p className="name">{user.userName}</p>
-                        </div>
-                        <div className="status-wrap">
-                            <div className="clear-count">
-                                <div className="clear-count-wrap status-part-wrap">
-                                    <p className="title">clear</p>
-                                    <p className="count">{user.totalScore}</p>
+                    <main className="home-content content jp">
+                        <div className="content-top">
+                            <div className="name-wrap">
+                                <p className="name">{user.userName}</p>
+                            </div>
+                            <div className="status-wrap">
+                                <div className="clear-count">
+                                    <div className="clear-count-wrap status-part-wrap">
+                                        <p className="title">clear</p>
+                                        <p className="count">{user.totalScore}</p>
+                                    </div>
+                                </div>
+                                <div className="ranking-number">
+                                    <div className="ranking-number-wrap status-part-wrap">
+                                        <p className="title">class</p>
+                                        <p className="user-class-name">{calUserClass(user.totalScore)}</p>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="ranking-number">
-                                <div className="ranking-number-wrap status-part-wrap">
-                                    <p className="title">class</p>
-                                    <p className="user-class-name">{calUserClass(user.totalScore)}</p>
-                                </div>
-                            </div>
                         </div>
-                    </div>
-                    <div className="content-bottom">
-                        <p className="red link" onClick={handleLogout}>ログアウト</p>
-                    </div>
-                </main>
-                <Footer />
+                        <div className="content-bottom">
+                            <p className="red link" onClick={handleLogout}>ログアウト</p>
+                        </div>
+                    </main>
                 </div>
             ):
             <div></div>

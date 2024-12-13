@@ -6,7 +6,6 @@ function ProtectedRoute({ children }) {
     const { currentUser } = useAuth();
 
     if (!currentUser) {
-        console.log('no')
         return <Navigate to="/"/>;
     }
 

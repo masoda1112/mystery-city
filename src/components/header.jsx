@@ -1,11 +1,23 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useEffect, useState} from 'react'
+import { useLocation } from "react-router-dom";
+import { AppContext } from '../AppContext';
 
-function Header(props) {
+function Header() {
+
+  const {headerTitle} = useContext(AppContext)
   return (
     <>
-      <div className="title-wrap">
-          <p className="title">{props.title}</p>
-      </div>
+    {
+      headerTitle ? (
+        <div className="title-wrap">
+          <p className="title">{headerTitle}</p>
+        </div>
+      ) : (
+        <div className="title-wrap">
+          <p className="title"></p>
+        </div>
+      )
+    }
     </>
   );
 }

@@ -13,6 +13,7 @@ function AppProvider({ children }) {
   const [mysteryStatus, setMysteryStatus] = useState(null)
   const [loading, setLoading] = useState(false)
   const [passwordResetPop, setPasswordResetPop] = useState(false)
+  const [headerTitle, setHeaderTitle] = useState('')
 
   return (
     <AppContext.Provider value={{ 
@@ -33,7 +34,9 @@ function AppProvider({ children }) {
       mysteryStatus,
       setMysteryStatus,
       loading,
-      setLoading
+      setLoading,
+      headerTitle,
+      setHeaderTitle
     }}>
       {children}
     </AppContext.Provider>

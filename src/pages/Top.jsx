@@ -7,6 +7,8 @@ import SignUpForm from '../components/signuppop';
 import LoginPop from '../components/loginpop';
 import { AppContext } from '../AppContext';
 import PasswordReset from '../components/passwordResetPop';
+import TopPart from '../components/topPart';
+import TopPop from '../components/topPop';
 
 function Top() {
     const {loginPopup, setLoginPopup} = useContext(AppContext)
@@ -23,19 +25,21 @@ function Top() {
         setPasswordResetPop(false)
     }
 
-    useEffect(() => {
-        // ポップアップが開いている間スクロールを無効にする
-        if (loginPopup || signUpPopup) {
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.body.style.overflow = 'auto';
-        }
-    
-        // クリーンアップでoverflowを戻す
+    // ポップアップが開いている時のスクロールを制御する
+    const handleScroll =()=> {
+        if (loginPopup || signUpPopup || passwordResetPop) {
+            document.body.style.overflow = 'hidden';
+          } else {
+            document.body.style.overflow = 'auto';
+          }
         return () => {
-          document.body.style.overflow = 'auto';
+            document.body.style.overflow = 'auto';
         };
-      }, [loginPopup, signUpPopup]);
+    }
+
+    useEffect(() => {
+        handleScroll()
+      }, [loginPopup, signUpPopup, passwordResetPop]);
 
     return (
         <>
@@ -57,59 +61,16 @@ function Top() {
                     <section className='about'>
                         <div className='container'>
                             <div className='top about_top'>
-                                <div className='part'>
-                                    <h2>Go</h2>
-                                    <p>Reach out for more information.</p>
-                                    <div className='images'>
-                                        <div className='image-wrap'>
-                                            <div className='image first-image loc_1'></div>
-                                        </div>
-                                        <div className='image-wrap'>
-                                            <div className='image second-image loc_2'></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='part'>
-                                    <h2>Solve</h2>
-                                    <p>Reach out for more information.</p>
-                                    <div className='images'>
-                                        <div className='image-wrap'>
-                                            <div className='image first-image rid_1'></div>
-                                        </div>
-                                        <div className='image-wrap'>
-                                            <div className='image second-image rid_2'></div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <TopPart name='go' />
+                                <TopPart name='solve' />
                             </div>
                             <ButtonContent />
                         </div>
                     </section>
                 </main>
-                <div className={`pop ${signUpPopup ? 'shown' : ''}`}>              
-                    <div className="pop-content signup-pop-content">
-                        <div className="close-button-wrap" onClick={signupClose}>
-                            <p className='close-button'>×</p>
-                        </div>      
-                        <SignUpForm />
-                    </div>
-                </div>
-                <div className={`pop ${loginPopup ? 'shown' : ''}`}>              
-                    <div className="pop-content login-pop-content">
-                        <div className="close-button-wrap" onClick={loginClose}>
-                            <p className='close-button'>×</p>
-                        </div>      
-                        <LoginPop />
-                    </div>
-                </div>
-                <div className={`pop ${passwordResetPop ? 'shown' : ''}`}>              
-                    <div className="pop-content login-pop-content">
-                        <div className="close-button-wrap" onClick={passwordClose}>
-                            <p className='close-button'>×</p>
-                        </div>      
-                        <PasswordReset />
-                    </div>
-                </div>
+                <TopPop component={SignUpForm} state={signUpPopup} setState={setSignUpPopup}/>
+                <TopPop component={LoginPop} state={loginPopup} setState={setLoginPopup}/>
+                <TopPop component={PasswordReset} state={passwordResetPop} setState={setPasswordResetPop}/>
             </div>
         </>
     );

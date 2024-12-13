@@ -1,11 +1,10 @@
 import React, { useState, useContext } from 'react'
-import { TextField, Button, Box, Typography, FormControl, InputLabel, Select, MenuItem } from '@mui/material'
-import { doc, setDoc } from 'firebase/firestore'
-import { auth, Firestore } from '../firebaseConfig'
+import { TextField, Button, Box, Typography} from '@mui/material'
+import { auth } from '../firebaseConfig'
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../AppContext'
-import { addNewDocumentWithID, addToRankArray, setLocalStorageItem , checkUserNameExists, addNewDocument, validateSignup} from '../functions/function'
+import { addNewDocumentWithID, setLocalStorageItem , addNewDocument, validateSignup, getDocumentsByCondition} from '../functions/function'
 import { PacmanLoader } from "react-spinners"
 
 
@@ -14,11 +13,10 @@ function SignUpForm() {
         userName: '',
         mail: '',
         password: ''
-    });
-    const [error, setError] = useState('');
-    const {user, setUser} = useContext(AppContext)
+    })
+    const [error, setError] = useState('')
     const {loading, setLoading} = useContext(AppContext)
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     // フォームデータの読み込み
     const handleChange = (e) => {
@@ -34,6 +32,7 @@ function SignUpForm() {
         return userCredential.user
     }
 
+    // userDataを作成する
     const buildUserData = (name, mail) => {
         const data = {
             userName: name,
@@ -41,10 +40,10 @@ function SignUpForm() {
             totalScore: 0,
             createdAt: new Date(),
         }
-
         return data
     }
 
+    // mysteriesStatusのデータを作成する処理
     const buildDefaultMysteriesStatus = () =>{
         let arr = []
         let count = 0
@@ -62,48 +61,48 @@ function SignUpForm() {
         const isValid = newErrors == "" ? true : false
         setError(newErrors)
         return isValid
-    };
-    
+    }
 
-    // サインアップの処理
-    const handleSignUp = async (e) => {
-        e.preventDefault();
-        const isValid = await validateForm();  // ここでフォームのバリデーションを実行
-    
-        if (!isValid) {
-            return; // バリデーションが失敗した場合、処理を中断
-        }
-
-        try {
-            setLoading(true)
-            const user = await addAuthAcount(auth, formData.mail, formData.password)
-            // fireStore用のuserData再定義
-            const userData = buildUserData(formData.userName, formData.mail)
-            
-            // mysteriesStatusをid1~30まで先に保存しておく。全て未購入状態
-            const mysteriesStatus = buildDefaultMysteriesStatus()
-
-            // user,userMysteryStatus,userNamesに新しいdocを追加
+    // fireStore(user,userMysteryStatus,userNames,ranking)に新しいdocを追加
+    const addDocumentsToFireStore = async(user, userData, mysteriesStatus)=>{
+        try{
             await addNewDocumentWithID('users', user.uid, userData)
             await addNewDocumentWithID('userMysteryStatus', formData.userName, {mysteriesStatus})
             await addNewDocument('userNames', {'userName': formData.userName})
-
-            // ローカルストレージにuser情報格納
-            setLocalStorageItem('user', userData)
-            // rankingに追加
             await addNewDocument('ranking', {'userName':formData.userName, 'totalScore': 0})
-            
-            // mysteriesにリダイレクト
+        }catch(error){
+        }
+    }
+    
+    // サインアップの処理
+    const handleSignUp = async (e) => {
+        e.preventDefault();
+        const isValid = await validateForm()  // ここでフォームのバリデーションを実行
+        if (!isValid) {
+            return; // バリデーションが失敗した場合、処理を中断
+        }
+        try {
+            setLoading(true)
+            // auth確認
+            const user = await addAuthAcount(auth, formData.mail, formData.password)
+            // firestoreに接続
+            const userData = buildUserData(formData.userName, formData.mail)
+            const mysteriesStatus = buildDefaultMysteriesStatus()
+            addDocumentsToFireStore(user, userData, mysteriesStatus)
+            setLocalStorageItem('user', userData)
+            // answerにリダイレクト
             navigate('/answer'); 
             
         } catch (error) {
-            console.log(error.message)
-            setError(error.message);
+            if (error.code === 'auth/email-already-in-use') {
+                setError({ mail: 'このメールアドレスはすでに使用されています。' });
+            } else {
+                setError({ general: error.message });
+            }
         }finally{
             setLoading(false)
         }
     };
-    
 
     return (
         <Box component="form" onSubmit={handleSignUp} sx={{ maxWidth: 400, mx: "auto", mt: 5 }}>

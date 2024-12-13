@@ -12,21 +12,19 @@ import {AppContext} from '../AppContext'
 function Ranking() {
     // ranking取得し格納するstate
     const [allRanking, setAllRanking] = useState([])
-    const [userNameScore, setUserNameScore] = useState([])
-    const [sortArray, setSortArray] = useState([])
     const { loading, setLoading } = useContext(AppContext)
+
+    // fireStoreのrankingのを取得し、allRankingにセット
+    const getRankingDocuments = async () => {
+        const data = await getCollectionDocumentsWithSort('ranking', 'totalScore')
+        setAllRanking(data)
+    }
 
     // ページ読み込み時にrankingを全て取得
     useEffect(() => {
-        const fetchDocuments = async () => {
-            const data = await getCollectionDocumentsWithSort('ranking', 'totalScore')
-            // const userData = await getDocumentsWithSelectedFields('users', ['userName', 'totalScore'])
-            setAllRanking(data)
-            // setUserNameScore(userData)
-        }
         try{
             setLoading(true)
-            fetchDocuments();
+            getRankingDocuments();
         }catch(e){
 
         }finally{
@@ -38,7 +36,6 @@ function Ranking() {
     return (
       <>
           <div className="page">
-              <Header title='Ranking'/>
               <main className="content ranks-content">
                   <div className="ranks-header">
                       <img className="ranks-header-img" src={dummy}/>
@@ -59,7 +56,6 @@ function Ranking() {
                     </div>
                     )}
               </main>
-              <Footer />
           </div>
       </>
     );

@@ -5,14 +5,13 @@ import LoginPop from '../components/loginpop';
 import { AppContext } from '../AppContext'
 
 function ButtonContent() {
-    const {signUpPopup, setSignUpPopup} = useContext(AppContext)
-    const {loginPopup, setLoginPopup} = useContext(AppContext)
-
-
+    const {setSignUpPopup} = useContext(AppContext)
+    const {setLoginPopup} = useContext(AppContext)
 
     const handleToggleSignUpPop = () => {
         setSignUpPopup(true)
     }
+
     const handleToggleLoginPop = () => {
         setLoginPopup(true)   
     }
