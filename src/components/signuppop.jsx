@@ -4,7 +4,7 @@ import { auth } from '../firebaseConfig'
 import { createUserWithEmailAndPassword } from "firebase/auth"
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../AppContext'
-import { addNewDocumentWithID, setLocalStorageItem , addNewDocument, validateSignup, getDocumentsByCondition} from '../functions/function'
+import { addNewDocumentWithID, setLocalStorageItem , addNewDocument, validateSignup, checkUserNameExists} from '../functions/function'
 import { PacmanLoader } from "react-spinners"
 
 
@@ -16,7 +16,8 @@ function SignUpForm() {
     })
     const [error, setError] = useState('')
     const {loading, setLoading} = useContext(AppContext)
-    const navigate = useNavigate()
+    const navigate = useNavigate() 
+    const [putButton, setPutButton] = useState()
 
     // フォームデータの読み込み
     const handleChange = (e) => {
@@ -76,6 +77,7 @@ function SignUpForm() {
     
     // サインアップの処理
     const handleSignUp = async (e) => {
+        setPutButton(true)
         e.preventDefault();
         const isValid = await validateForm()  // ここでフォームのバリデーションを実行
         if (!isValid) {
@@ -85,6 +87,13 @@ function SignUpForm() {
             setLoading(true)
             // auth確認
             const user = await addAuthAcount(auth, formData.mail, formData.password)
+            // unique確認
+                // 名前がユニークかどうか確認
+            const unique = await checkUserNameExists(formData.userName)
+            if(unique){
+                setError({userName: 'このユーザーネームは既に使われています。'})
+                throw new Error("このユーザーネームは既に使われています。")
+            }
             // firestoreに接続
             const userData = buildUserData(formData.userName, formData.mail)
             const mysteriesStatus = buildDefaultMysteriesStatus()
@@ -94,6 +103,7 @@ function SignUpForm() {
             navigate('/answer'); 
             
         } catch (error) {
+            alert("エラー: " + error.message);
             if (error.code === 'auth/email-already-in-use') {
                 setError({ mail: 'このメールアドレスはすでに使用されています。' });
             } else {
@@ -149,6 +159,11 @@ function SignUpForm() {
             <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
                 登録
             </Button>
+            {putButton ? (
+                <div style={{fontSize: '30px'}}>
+                    ボタンは押したぜ
+                </div>
+            ):<></>}
             {loading && (
                 <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
                     <PacmanLoader color="#000000" loading={loading} size={25} />

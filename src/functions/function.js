@@ -206,14 +206,14 @@ export const addToRankArray = async(rank, name) => {
   } catch (error) {
     console.error("Error setting item in local storage:", error)
   }
-};
+}
 
 
 // ユーザーネームがユニークかどうか確認する関数
 export const checkUserNameExists = async (userName) => {
   const resultByAPI = await getDocumentsByCondition("userNames", "userName", "==" , userName)
   return !(resultByAPI.length == 0); // ユーザー名がすでに存在する場合はtrueを返す
-};
+}
 
 // 登録のバリデーション
 export const validateSignup = async(userName, mail, password) => {
@@ -223,13 +223,6 @@ export const validateSignup = async(userName, mail, password) => {
     // ユーザーネームのバリデーション
     if (!userName) {
         newErrors.userName = "ユーザーネームは必須です";
-        isValid = false;
-    }
-
-    // 名前がユニークかどうか確認
-    const unique = await checkUserNameExists(userName)
-    if(unique){
-        newErrors.userName = "このユーザーネームは既に使われています。"
         isValid = false;
     }
 
