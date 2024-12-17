@@ -19,10 +19,10 @@ function ButtonContent() {
         <>
             <div className='button-content'>
                 <div className='button-wrap'>
-                    <Button variant="contained" style={{width: '100%', height: '100%'}} onClick={handleToggleSignUpPop}>登録</Button>
+                    <Button variant="contained" style={{width: '100%', height: '100%', backgroundColor: '#E34234'}} onClick={handleToggleSignUpPop}>メンバー登録</Button>
                 </div>
                 <div className='button-wrap'>
-                    <Button variant="outlined" style={{width: '100%', height: '100%'}} onClick={handleToggleLoginPop}>ログイン</Button>
+                    <Button variant="contained" style={{width: '100%', height: '100%'}} onClick={handleToggleLoginPop}>ログイン</Button>
                 </div>
             </div>
         </>

@@ -64,7 +64,11 @@ section{
 }
 
 .image{
-  background-color: #a6a6a6;
+  background-color: #dddbdb;
+  background-image: url('./assets/トップ画像思考.png');
+  background-size: cover;
+  background-position: center;
+  
 }
 
 .container{
@@ -82,9 +86,10 @@ section{
 }
 
 .container .bg-image{
-  background-image: url('./assets/謎解きアプリ.png');
-  background-size: contain;
+  /* background-image: url('./assets/top-image.png');
+  background-size: cover;
   background-repeat: no-repeat;
+  background-position: center; */
   padding: 7%;
   padding-top: 20%;
   margin: 0;
@@ -107,9 +112,11 @@ section{
 }
 
 .image .container .top-explanation{
-  padding: 5%;
-  background: rgba(250,250,250,0.6);
+  padding:20% 5%;
+  /* background: rgba(0,0,0,0.6); */
+  background-color: #ececece2;
   border-radius: 5%;
+  color: #262626;
 }
 
 .image .container .top-explanation h1{
@@ -309,6 +316,7 @@ section{
   flex-direction: column;
   overflow-x:auto;
   height: auto;
+  background-color: #e6e4e4;
   
 }
 
@@ -323,6 +331,7 @@ section{
   height: auto;
   width: 100%;
   overflow: hidden;
+  
 }
 
 .mystery-content{

@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
-import Footer from '../components/footer'
-import Card from '../components/footer'
 import Rank from '../components/rank'
-import Header from '../components/header'
-import { getCollectionDocuments, getCollectionDocumentsWithSort } from "../functions/function"
+import { getCollectionDocumentsWithSort } from "../functions/function"
 import dummy from "../assets/ranking-header.png"
 import { PacmanLoader } from "react-spinners"
 import {AppContext} from '../AppContext'

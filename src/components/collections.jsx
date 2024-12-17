@@ -1,8 +1,9 @@
-import React, { useContext, useEffect , useState} from 'react';
+import React, { useContext, useEffect} from 'react'
 import { PacmanLoader } from "react-spinners"
-import Card from './card';
+import Card from './card'
 import { AppContext } from '../AppContext'
-import { getCollectionDocuments, fetchImageURL, getDocumentById , getDataList} from '../functions/function'
+import { getDocumentById , getDataList} from '../functions/function'
+import imgQ from "../assets/unFind.png"
 
 
 function Collection(props) {
@@ -48,6 +49,15 @@ function Collection(props) {
                         key={index}
                       >
                         <Card url={c.img} />
+                      </div>
+                    )
+                  }else{
+                    return(
+                      <div
+                        className="mystery-wrap"
+                        key={index}
+                      >
+                        <Card url={imgQ} />
                       </div>
                     )
                   }
