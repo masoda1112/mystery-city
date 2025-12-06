@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "mystery-city-a3b49",
     "public": "build",
     "ignore": [
       "firebase.json",
