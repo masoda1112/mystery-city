@@ -20,6 +20,10 @@ function Answer() {
     const [formData, setFormData] = useState({
       answer: '',
     });
+    // --- ポップアップ状態と画像 ---
+    const [popupOpen, setPopupOpen] = useState(false);
+    const [popupImg, setPopupImg] = useState("https://dummyimage.com/400x200/39f/fff.png&text=%E6%AD%A3%E8%A7%A3%EF%BC%81");
+    // ---
 
     const handleChange = (e) => {
       setFormData({
@@ -43,7 +47,8 @@ function Answer() {
         setError('何かが違うようだ。')
       }else{
         setAnswer(data)
-        setCorrectPopup(true)
+        setPopupOpen(true) // 正解でポップアップON
+        // setPopupImg("画像URL"); // ここでダミー以外の画像文字列に切替可
         setError(false)
         updateUserStatus(data)
       }
@@ -71,35 +76,129 @@ function Answer() {
 
     return (
       <>
-          <div className="page">
-            <main className="content">
-              <Box component="form" onSubmit={sendAnswer} sx={{ maxWidth: 400, mx: "auto", mt: 5 }}>
-                <Typography variant="h5" gutterBottom>
-                    回答を入力してみよう！
-                </Typography>
-                <TextField
-                    label="ひらがなで入力してね"
-                    variant="outlined"
-                    name="answer"
-                    fullWidth
-                    margin="normal"
-                    value={formData.answer}
-                    onChange={handleChange}
-                    required
-                    error={Boolean(error)}
-                    helperText={error}
-                />
-                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 3 }}>
-                    回答を送信
-                </Button>
-              </Box>
-              {loading && (
-                <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>
-                    <PacmanLoader color="#000000" loading={loading} size={25} />
+          <div className="page" style={{minHeight: '100vh', background:'#fff'}}>
+          <main
+            className="content"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '90vh',
+              position: 'relative',
+            }}
+          >
+            <Box
+              component="form"
+              onSubmit={sendAnswer}
+              sx={{
+                width: { xs: '90vw', sm: 380 },
+                maxWidth: 400,
+                mx: 'auto',
+                mt: { xs: 4, sm: 6 },
+                p: { xs: 0, sm: 0 },              // 余白も極力シンプルに
+                background: 'transparent',        // 背景カード色を消す
+                borderRadius: 0,                  // 角丸なし
+                boxShadow: 'none',                // 影なし（立体感を消す）
+                minHeight: 'auto',
+                boxSizing: 'border-box',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'stretch',            // フォームを横幅いっぱいに
+                position: 'relative',
+                gap: 2,                           // 要素の間隔だけ軽く空ける
+              }}
+            >
+              {popupOpen && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    background: '#fff',
+                    borderRadius: '14px',
+                    boxShadow: '0 2px 20px rgba(0,0,0,0.18)',
+                    zIndex: 20,
+                    padding: '9px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <img
+                    src={popupImg}
+                    alt="正解ポップアップ"
+                    style={{
+                      width: '320px',
+                      maxWidth: '80vw',
+                      height: 'auto',
+                      display: 'block',
+                      borderRadius: '10px',
+                    }}
+                  />
                 </div>
               )}
-            </main>
-            {/* <CorrectPop /> */}
+
+              <Typography
+                variant="h5"
+                gutterBottom
+                sx={{
+                  fontSize: { xs: '1.1rem', sm: '1.4rem' },
+                  textAlign: 'center',
+                  mb: { xs: 1, sm: 2 },
+                }}
+              >
+                回答を入力してみよう！
+              </Typography>
+
+              <TextField
+                label="ひらがなで入力してね"
+                variant="standard"                 // ⇒ 下線だけのフラットな入力欄
+                name="answer"
+                fullWidth
+                margin="normal"
+                value={formData.answer}
+                onChange={handleChange}
+                required
+                error={Boolean(error)}
+                helperText={error}
+                sx={{
+                  background: 'transparent',
+                  '& .MuiInputBase-root': { fontSize: { xs: '1rem', sm: '1.1rem' } },
+                }}
+              />
+
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{
+                  mt: 2,
+                  py: 1.2,
+                  fontSize: { xs: '1rem', sm: '1.05rem' },
+                  borderRadius: 9999,              // ボタンだけ少し丸くする（好みで）
+                  boxShadow: 'none',               // ボタンの影も消したいなら追加
+                }}
+              >
+                回答を送信
+              </Button>
+            </Box>
+
+            {loading && (
+              <div
+                style={{
+                  position: 'fixed',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                }}
+              >
+                <PacmanLoader color="#000000" loading={loading} size={25} />
+              </div>
+            )}
+          </main>
           </div>
       </>
     );
