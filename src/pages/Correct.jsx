@@ -46,7 +46,7 @@ function Correct() {
                     <div className="certificate">
                         <div className="cert-header">
                         <div className="cert-series">
-                            MYSTERY CITY CHALLENGE #012
+                            TABINAZO #012
                             {/* {`MYSTERY CITY CHALLENGE #${seriesNumber}`} みたいに差し替え */}
                         </div>
                         <div className="cert-label">SOLVER CERTIFICATE</div>
