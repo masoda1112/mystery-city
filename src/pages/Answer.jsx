@@ -92,10 +92,10 @@ function Answer() {
                   gutterBottom
                   sx={{ fontSize: { xs: '1.2rem', sm: '1.6rem' }, textAlign: 'center', mb: { xs: 2, sm: 3 } }}
                 >
-                    回答を入力してみよう！
+                    回答を入力
                 </Typography>
                 <TextField
-                  label="ひらがなで入力してね"
+                  label="ひらがなで入力"
                   variant="outlined"
                   name="answer"
                   fullWidth
@@ -110,9 +110,21 @@ function Answer() {
                 <Button
                   type="submit"
                   variant="contained"
-                  color="primary"
                   fullWidth
-                  sx={{ mt: 3, py: 1.4, fontSize: { xs: '1rem', sm: '1.1rem' }, borderRadius: 2 }}
+                  sx={{
+                    mt: 3,
+                    py: 1.4,
+                    fontSize: { xs: '1rem', sm: '1.1rem' },
+                    borderRadius: 2,
+                    backgroundColor: '#1C1F26',
+                    color: '#ffffff',
+                    '&:hover': {
+                      backgroundColor: '#101318',
+                    },
+                    boxShadow: 'none',          // 上品に見せる
+                    textTransform: 'none',      // 大文字化しない（世界観維持）
+                    letterSpacing: '0.03em',    // 少し上品な行間に
+                  }}
                 >
                   回答を送信
                 </Button>

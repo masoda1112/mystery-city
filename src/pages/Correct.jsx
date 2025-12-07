@@ -75,15 +75,22 @@ function Correct() {
 
                     <Button
                         variant="contained"
-                        color="primary"
                         onClick={handleBack}
                         sx={{
                             mt: 3,
                             py: 1.4,
                             fontSize: { xs: '1rem', sm: '1.1rem' },
                             borderRadius: 2,
+                            backgroundColor: '#1C1F26',
+                            color: '#ffffff',
+                            '&:hover': {
+                            backgroundColor: '#101318'
+                            },
+                            boxShadow: 'none',           // 高級感を出すため影を消す（任意）
+                            textTransform: 'none',       // ボタン文字を大文字化しない
+                            letterSpacing: '0.03em',     // ほんの少し間を空けて上品に
                         }}
-                        >
+                    >
                         戻る
                     </Button>
                 </Box>
