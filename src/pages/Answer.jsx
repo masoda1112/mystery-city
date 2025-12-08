@@ -115,7 +115,7 @@ function Answer() {
               sx={{ width: 'calc(100% - 80px)', maxWidth: 'none', mx: '40px', mt: '40px', p: { xs: 2, sm: 4 }, background: 'transparent', borderRadius: 0, boxShadow: 'none', minHeight: { xs: 280, sm: 320 }, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'visible', }}
             >
               <Typography variant="h5" gutterBottom sx={{ fontSize: { xs: '1.2rem', sm: '1.6rem' }, textAlign: 'center', mb: { xs: 2, sm: 3 }, }}>
-                回答を入力
+                答えを入力
               </Typography>
               <TextField label="ひらがなで入力" variant="outlined" name="answer" fullWidth margin="normal" value={formData.answer} onChange={handleChange} required error={Boolean(error)} helperText={error} sx={{ fontSize: { xs: '1rem', sm: '1.2rem' }, background: '#fff', }}/>
               <Button type="submit" variant="contained" fullWidth sx={{ mt: 3, py: 1.4, fontSize: { xs: '1rem', sm: '1.1rem' }, borderRadius: 2, backgroundColor: '#1C1F26', color: '#ffffff', '&:hover': { backgroundColor: '#101318', }, boxShadow: 'none', textTransform: 'none', letterSpacing: '0.03em', }}>
