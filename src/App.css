@@ -22,7 +22,16 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding-top: 20px;
 }
+
+.site-header {
+  padding: 32px 0 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 .App-link {
   color: #61dafb;
@@ -36,6 +45,8 @@
     transform: rotate(360deg);
   }
 }
+
+/* 回答結果のオーバーレイ系 ------------------ */
 
 .result-overlay {
   position: fixed;
@@ -122,6 +133,9 @@
   color: #888;
 }
 
+/* 賞状 ------------------ */
+/* 賞状 ------------------ */
+
 .certificate-wrap {
   display: flex;
   justify-content: center;
@@ -130,28 +144,23 @@
 }
 
 .certificate {
-  width: 320px;          /* スマホでちょうどいい縦長 */
+  width: 320px;
   padding: 32px 28px;
-  background: #fafafa;
-  border: 1px solid #222;
   box-sizing: border-box;
+  font-family: 'Noto Serif JP', serif;
+  margin: 0 auto;
 }
+
+/* 共通レイアウト */
 
 .cert-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .cert-series {
   font-size: 10px;
   letter-spacing: 0.16em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-
-.cert-label {
-  font-size: 12px;
-  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
@@ -160,7 +169,24 @@
   margin-bottom: 32px;
 }
 
+/* LEVEL 表示（小さめ） */
+.cert-level {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* タイトル（LEVEL より大きく） */
+.cert-title {
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+/* 034 番号 */
 .cert-rank {
+  font-family: 'Cormorant Garamond', 'Noto Serif JP', serif;
   font-size: 48px;
   letter-spacing: 0.08em;
   margin-bottom: 8px;
@@ -173,6 +199,145 @@
 .cert-footer {
   font-size: 10px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   opacity: 0.8;
+}
+
+.cert-brand {
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+}
+
+/* ===== レベル別：色 × 枠 ===== */
+
+/* LEVEL 0 */
+/* ===== LEVEL 共通 ===== */
+/* ===== 賞状全体 ===== */
+.certificate {
+  width: 320px;
+  padding: 32px 28px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  font-family: 'Noto Serif JP', serif;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+/* シリーズ名 */
+.cert-series {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  margin-bottom: 16px;
+}
+
+/* 星表示 */
+.cert-stars {
+  font-size: 16px;
+  margin-bottom: 16px;
+  letter-spacing: 4px;
+}
+
+/* タイトル */
+.cert-title {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* 044 番号 */
+.cert-rank {
+  font-size: 48px;
+  font-family: 'Cormorant Garamond', serif;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+/* 説明文 */
+.cert-rank-caption {
+  font-size: 12px;
+  margin-bottom: 32px;
+}
+
+/* ブランド表記 */
+.cert-brand {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+/* ===== LEVEL バリエーション ===== */
+
+.certificate.level-1 {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.certificate.level-2 {
+  background: #f3f7ff;
+  border: 1.5px solid #445;
+  border-radius: 8px;
+}
+
+.certificate.level-3 {
+  background: #eef2ff;
+  border: 3px double #334;
+  border-radius: 8px;
+}
+
+.certificate.level-4 {
+  background: #fff8e8;
+  border: 2px solid #e0c27b;
+  border-radius: 10px;
+}
+
+.certificate.level-5 {
+  background: #ffffff;
+  border: 3px inset #bbb;
+  border-radius: 4px;
+}
+
+.certificate.level-6 {
+  background: #f4f0ff;
+  border: 3px double #6b59d5;
+  border-radius: 10px;
+  box-shadow: 0 0 6px rgba(80, 60, 180, 0.3);
+}
+
+.certificate.level-7 {
+  background: #11131e;
+  color: white;
+  border: 2px solid #d4af37;
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+}
+
+.certificate.level-8 {
+  background: #000;
+  color: #f7d978;
+  border: 2px solid #f7d978;
+  border-radius: 10px;
+  box-shadow: 0 0 12px rgba(247, 217, 120, 0.8);
+}
+
+.note-promo {
+  margin: 20px auto;
+  text-align: center;
+}
+
+.note-promo a {
+  display: inline-block;
+  padding: 10px 16px;
+  background: #f7f7f7;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #222;
+  font-size: 14px;
+  transition: 0.15s ease;
+}
+
+.note-promo a:hover {
+  background: #ececec;
+  transform: translateY(-2px);
 }

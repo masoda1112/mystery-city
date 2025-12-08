@@ -5,13 +5,34 @@ import { Firestore, FirebaseStorage } from "../firebaseConfig";
 
 // ドキュメントの中で一致するものを検索する関数
 export async function getDocumentsByCondition(collectionName, field, operator, value) {
-  const q = query(collection(Firestore, collectionName), where(field, operator, value))
-  const querySnapshot = await getDocs(q);
-  const results = [];
-  querySnapshot.forEach((doc) => {
-    results.push({ id: doc.id, ...doc.data() });
-  });
-  return results; 
+  try {
+    console.log(`Fetching from collection: ${collectionName}, field: ${field}, value: ${value}`)
+    console.log('Firestore instance:', Firestore)
+    console.log('User Agent:', navigator.userAgent)
+    console.log('Is Mobile:', /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))
+    
+    const q = query(collection(Firestore, collectionName), where(field, operator, value))
+    console.log('Query created, executing...')
+    const querySnapshot = await getDocs(q);
+    console.log('Query executed successfully')
+    const results = [];
+    querySnapshot.forEach((doc) => {
+      results.push({ id: doc.id, ...doc.data() });
+    });
+    console.log(`Found ${results.length} documents in ${collectionName}`)
+    return results;
+  } catch (error) {
+    console.error(`Error in getDocumentsByCondition (${collectionName}):`, error);
+    console.error('Error details:', {
+      code: error.code,
+      message: error.message,
+      stack: error.stack,
+      name: error.name,
+      userAgent: navigator.userAgent,
+      isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    });
+    throw error; // エラーを再スローして呼び出し元で処理できるようにする
+  }
 }
 
 // getDocumentByIdのサポート関数
@@ -69,23 +90,28 @@ export const getCollectionDocumentsWithSort = async(collectionName, field) =>{
 
 // フィールドの一部を更新する関数（該当するドキュメントは1つだけ）
 export async function updateDocumentField(collectionName, field, operator, value, updateData) {
-  const documents = await getDocumentsByCondition(collectionName, field, operator, value);
-  // ドキュメントが見つかれば、最初のドキュメントを更新
-  if (documents.length === 1) {
-    const docData = documents[0]; // 一致するドキュメント（1つ）
-    const docRef = doc(Firestore, collectionName, docData.id);
-    try {
+  try {
+    const documents = await getDocumentsByCondition(collectionName, field, operator, value);
+    // ドキュメントが見つかれば、最初のドキュメントを更新
+    if (documents.length === 1) {
+      const docData = documents[0]; // 一致するドキュメント（1つ）
+      const docRef = doc(Firestore, collectionName, docData.id);
       await updateDoc(docRef, updateData);
       console.log(`Document with id ${docData.id} updated successfully`);
-    } catch (error) {
-      console.error(`Error updating document with id ${docData.id}:`, error);
-    }
-  } else {
-    if (documents.length === 0) {
-      console.log("No documents found matching the criteria.");
     } else {
-      console.log("Multiple documents found. Expected exactly one.");
+      if (documents.length === 0) {
+        const errorMsg = "No documents found matching the criteria.";
+        console.log(errorMsg);
+        throw new Error(errorMsg);
+      } else {
+        const errorMsg = "Multiple documents found. Expected exactly one.";
+        console.log(errorMsg);
+        throw new Error(errorMsg);
+      }
     }
+  } catch (error) {
+    console.error(`Error in updateDocumentField (${collectionName}):`, error);
+    throw error; // エラーを再スローして呼び出し元で処理できるようにする
   }
 }
 
