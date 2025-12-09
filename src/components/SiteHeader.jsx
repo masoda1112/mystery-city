@@ -51,6 +51,9 @@ function SiteHeader() {
         <MenuItem onClick={handleClose} component="a" href="/howto">
           遊び方
         </MenuItem>
+        <MenuItem onClick={handleClose} component="a" href="/privacy">
+          プライバシーポリシー
+        </MenuItem>
         <MenuItem
           onClick={handleClose}
           component="a"
