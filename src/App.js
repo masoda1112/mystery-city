@@ -2,6 +2,8 @@ import './App.css'
 import Answer from './pages/Answer'
 import Correct from './pages/Correct'
 import About from './pages/About'
+import Admin from './pages/Admin';
+
 import HowTo from './pages/HowTo'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -15,6 +17,8 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/howto" element={<HowTo />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
+
+        <Route path="/admin" element={<Admin />} />
 
         {/* 正解ページ */}
         <Route path="/correct" element={<Correct />} />

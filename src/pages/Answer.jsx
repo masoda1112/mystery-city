@@ -14,8 +14,12 @@ function Answer() {
     const [formData, setFormData] = useState({answer: ''});
 
     const handleChange = (e) => {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+      const { name, value } = e.target;
+      setFormData((prev) => ({ ...prev, [name]: value }));
     };
+    
+    
+    
 
     const handlePathChange = () => {
       setLoading(false)
@@ -71,41 +75,55 @@ function Answer() {
       }
     };
 
-    const sendAnswer = async(e) => {
+    const sendAnswer = async (e) => {
       e.preventDefault();
       setLoading(true);
       setError('');
-      try{
+    
+      try {
         const answerText = formData.answer.trim();
-        if(!answerText){ 
-          setError('回答を入力してください。'); 
-          setLoading(false); 
-          return; 
-        }
-
-        const questionData = await withTimeout(
-          getDocumentsByCondition('question', 'answer', '==', answerText),
-        20000);
-
-        if(questionData.length>0){
-          await handleCorrectPopup(questionData, answerText, true)
-        }else{
-          setError('何かが違うようだ。'); 
-          setLoading(false); 
+    
+        if (!answerText) {
+          setError('回答を入力してください。');
+          setLoading(false);
           return;
         }
-
-      }catch(fetchError){
-        if(fetchError?.code === 'permission-denied'){
-          setError('アクセス権限がありません。Firestoreのセキュリティルールをご確認ください。')
-        }else if(fetchError.message && fetchError.message.includes('タイムアウト')){
-          setError('接続に時間がかかりすぎています。しばらく待って再度お試しください。')
-        }else{
-          setError('エラーが発生しました。もう一度お試しください。')
+    
+        // ▼ ひらがなチェック（ぁ〜ん・ー）
+        const hiraganaRegex = /^[ぁ-んー]+$/;
+        if (!hiraganaRegex.test(answerText)) {
+          setError('ひらがなのみで入力してください。');
+          setLoading(false);
+          return;
         }
-        setLoading(false)
+    
+        // Firestore にクエリ
+        const questionData = await withTimeout(
+          getDocumentsByCondition('question', 'answer', '==', answerText),
+          20000
+        );
+    
+        if (questionData.length > 0) {
+          await handleCorrectPopup(questionData, answerText, true);
+        } else {
+          setError('何かが違うようだ。');
+          setLoading(false);
+          return;
+        }
+      } catch (fetchError) {
+        if (fetchError?.code === 'permission-denied') {
+          setError(
+            'アクセス権限がありません。Firestoreのセキュリティルールで「question」コレクションの読み取り権限を設定してください。'
+          );
+        } else if (fetchError.message && fetchError.message.includes('タイムアウト')) {
+          setError('接続に時間がかかりすぎています。しばらく待ってから再度お試しください。');
+        } else {
+          setError('エラーが発生しました。もう一度お試しください。');
+        }
+        setLoading(false);
       }
     };
+    
 
     useEffect(() => {
       setLoading(false)
@@ -173,9 +191,10 @@ function Answer() {
               onChange={handleChange}
               required
               error={Boolean(error)}
-              helperText={error}
+              helperText={error || 'ひらがな（ぁ〜ん・ー）のみ'}
               sx={{ background: '#fff' }}
             />
+
 
             <Button
               type="submit"

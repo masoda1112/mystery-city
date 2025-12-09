@@ -180,6 +180,8 @@ export const addNewDocument = async (collectionName,  data) => {
   }
 };
 
+export const addDocument = addNewDocument;
+
 
 // 新しいドキュメントを追加する関数(ID付き)
 export const addNewDocumentWithID = async (collectionName, documentID, data) => {
