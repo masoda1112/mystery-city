@@ -11,7 +11,11 @@ import {
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SiteHeader from '../components/SiteHeader';
-import { addDocument, getCollectionDocumentsWithSort } from '../functions/function';
+import {
+  addDocument,
+  getCollectionDocumentsWithSort,
+  checkDuplicateAnswer,   // ★ 重複チェック用
+} from '../functions/function';
 
 function Admin() {
   const [form, setForm] = useState({
@@ -84,9 +88,11 @@ function Admin() {
       return;
     }
 
-    // ▼ ここでひらがなチェック（ぁ〜ん と 長音 ー）
+    const trimmedAnswer = form.answer.trim();
+
+    // ▼ ひらがなチェック（ぁ〜ん と 長音 ー）
     const hiraganaRegex = /^[ぁ-んー]+$/;
-    if (!hiraganaRegex.test(form.answer.trim())) {
+    if (!hiraganaRegex.test(trimmedAnswer)) {
       setMessage({
         type: 'error',
         text: '答えは ひらがな（ぁ〜ん・ー）だけで入力してください。',
@@ -94,10 +100,29 @@ function Admin() {
       return;
     }
 
+    // ▼ Firestore 上で answer の重複チェック
+    try {
+      const isDup = await checkDuplicateAnswer(trimmedAnswer);
+      if (isDup) {
+        setMessage({
+          type: 'error',
+          text: 'この答えはすでに登録されています。（answer の重複）',
+        });
+        return;
+      }
+    } catch (err) {
+      console.error('answer 重複チェックに失敗:', err);
+      setMessage({
+        type: 'error',
+        text: '答えの重複チェックに失敗しました。しばらくしてから再度お試しください。',
+      });
+      return;
+    }
+
     const data = {
       no: noNum,
       title: form.title,
-      answer: form.answer.trim(),
+      answer: trimmedAnswer,
       level: levelNum,
       clearCount: 0,
       createdAt: new Date().toISOString(), // 任意
